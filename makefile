@@ -6,9 +6,9 @@ ALLEG =`pkg-config --cflags --libs allegro-5 allegro_primitives-5 allegro_image-
 SRCS = $(wildcard src/*.cc)
 OBJS = $(patsubst src/%.cc,obj/%.o,$(SRCS))
 
-all: breakout
+all: hc
 
-breakout: $(OBJS)
+hc: $(OBJS)
 	@echo $@
 	@$(CXX) -o $@ $^ $(ALLEG)
 

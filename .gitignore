@@ -1,4 +1,6 @@
-# ---> C++
+# Project binary
+hc
+
 # Compiled Object files
 *.slo
 *.lo
@@ -28,3 +30,6 @@
 *.out
 *.app
 
+# Sublime Text project files
+*.sublime-project
+*.sublime-workspace
