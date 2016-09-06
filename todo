@@ -1,6 +1,3 @@
 - research use of templates for manager class
 - review naming conventions
 	- differentiate methods from members
-- restructure source files
-	- isolate 'hydrogen-core' from project-specific files
-	- group utils (if applicable) away from core
