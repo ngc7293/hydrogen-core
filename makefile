@@ -17,10 +17,12 @@ hc: $(COREOBJS) $(GAMEOBJS)
 
 obj/hc/%.o: src/hc/%.cc
 	@echo $<
+	@mkdir -p obj/hc
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 obj/game/%.o: src/game/%.cc
 	@echo $<
+	@mkdir -p obj/game
 	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I src/hc/
 
 clean:
