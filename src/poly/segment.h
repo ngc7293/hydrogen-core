@@ -11,7 +11,7 @@ private:
 
 public:
 	static float mindistance(Segment& a, Segment& b);
-	static float mindistance(Segment& a, Vector& p);
+	static float mindistance(Segment& a, Vector p);
 	static bool intersection(Segment& a, Segment& b);
 
 public:
