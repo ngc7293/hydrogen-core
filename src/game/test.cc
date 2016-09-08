@@ -1,9 +1,21 @@
 #include "test.h"
 
-#include <iostream>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
-Test::Test()
+#include "game.h"
+#include "input.h"
+#include "manager.h"
+
+Test::Test(double x, double y, Vector2d vec)
 	: Object(TEST)
+	, s_(x, y, vec)
+{
+}
+
+Test::Test(double x, double y, double x2, double y2)
+	: Object(TEST)
+	, s_(x, y, x2, y2)
 {
 }
 
@@ -13,13 +25,26 @@ Test::~Test()
 
 void Test::update()
 {
+	Test* t = static_cast<Test*>(Game::game()->manager()->first(TEST));
+	if (t == this) {
+		Input* input = Game::game()->input();
+		s_.director() = Vector2d(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
+	}
 }
 
 void Test::render()
 {
-}
+	s_.render();
 
-void Test::talktome()
-{
-	std::cout << "IT FUCKING WORKED WE DID IT REDDIT\n";
+	std::vector<Object*> tests = Game::game()->manager()->all(TEST);
+
+	for (unsigned int i(0); i < tests.size(); i++) {
+		Test* t = static_cast<Test*>(tests[i]);
+
+		if (t != this) {
+			Vector2d pos = Segment2d::intersection(s_, t->s());
+			if (!(pos.x() == 0 && pos.y() == 0))
+				al_draw_filled_circle(pos.x(), pos.y(), 3, al_map_rgb(255, 0, 0));
+		}	
+	}
 }

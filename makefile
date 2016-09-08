@@ -9,9 +9,12 @@ COREOBJS = $(patsubst src/hc/%.cc,obj/hc/%.o,$(CORESRCS))
 GAMESRCS = $(wildcard src/game/*.cc)
 GAMEOBJS = $(patsubst src/game/%.cc,obj/game/%.o,$(GAMESRCS))
 
+POLYSRCS = $(wildcard src/poly/*.cc)
+POLYOBJS = $(patsubst src/poly/%.cc,obj/poly/%.o,$(POLYSRCS))
+
 all: hc
 
-hc: $(COREOBJS) $(GAMEOBJS)
+hc: $(COREOBJS) $(GAMEOBJS) $(POLYOBJS)
 	@echo $@
 	@$(CXX) -o $@ $^ $(ALLEG)
 
@@ -23,7 +26,12 @@ obj/hc/%.o: src/hc/%.cc
 obj/game/%.o: src/game/%.cc
 	@echo $<
 	@mkdir -p obj/game
-	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I src/hc/
+	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I src/hc/ -I src/poly
+
+obj/poly/%.o: src/poly/%.cc
+	@echo $<
+	@mkdir -p obj/poly
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	@rm obj/hc/* obj/game/* hc
+	@rm -rf obj/* hc
