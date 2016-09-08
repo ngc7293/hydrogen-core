@@ -14,8 +14,8 @@ public:
 
 public:
 	Segment(Vector origin, Vector director);
-	Segment(double x, double y, Vector director);
-	Segment(double x, double y, double x2, double y2);
+	Segment(float x, float y, Vector director);
+	Segment(float x, float y, float x2, float y2);
 	~Segment();
 
 	Vector& origin() { return origin_; }

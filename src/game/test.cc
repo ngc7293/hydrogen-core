@@ -3,22 +3,25 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "boundingpoly.h"
 #include "game.h"
 #include "input.h"
 #include "manager.h"
-#include "boundingpoly.h"
 #include "segment.h"
 
-Test::Test(double x, double y)
-    : Object(TEST)
-    , x_(x)
-    , y_(y)
-    , poly_(x, y)
+Test::Test(float x, float y)
+	: Object(TEST)
+	, x_(x)
+	, y_(y)
+	, poly_(x, y)
 {
-	poly_.add(hc::Segment(x-16, y - 16, x + 64, y-16));
-	poly_.add(hc::Segment(x + 64, y - 16, x, y + 64));
-	poly_.add(hc::Segment(x, y + 64, x - 64, y));
-	poly_.add(hc::Segment(x - 64, y, x - 16	, y - 16));
+	hc::Vector p1(-(rand() % 64), -(rand() % 64));
+	hc::Vector p2((rand() % 64), -(rand() % 64));
+	hc::Vector p3((rand() % 48) - 24, (rand() % 48) + 16);
+
+	poly_.add(hc::Segment(p1.x(), p1.y(), p2.x(), p2.y()));
+	poly_.add(hc::Segment(p1.x(), p1.y(), p3.x(), p3.y()));
+	poly_.add(hc::Segment(p3.x(), p3.y(), p2.x(), p2.y()));
 }
 
 Test::~Test()
@@ -30,9 +33,12 @@ void Test::update()
 	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (t == this) {
 		hc::Input* input = hc::Game::game()->input();
-		poly_.move(input->mx() - x_, input->my() - y_);
+		poly_.move(input->mx(), input->my());
 		x_ = input->mx();
 		y_ = input->my();
+
+		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_SPACE))
+			poly_.rotate(PI / 180);
 	}
 
 	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
@@ -45,7 +51,5 @@ void Test::update()
 
 void Test::render()
 {
-	for (unsigned int i(0); i < poly_.segments().size(); i++)
-		poly_.segments()[i].render();
-	al_draw_filled_circle(x_, y_, 4, al_map_rgb(255, 255, 255));
+	poly_.render();
 }

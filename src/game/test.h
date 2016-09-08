@@ -7,11 +7,11 @@
 
 class Test : public hc::Object {
 private:
-	double x_, y_;
+	float x_, y_;
 	hc::BoundingPoly poly_;
 
 public:
-	Test(double x, double y);
+	Test(float x, float y);
 	virtual ~Test();
 
 	virtual void update();

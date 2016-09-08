@@ -17,13 +17,13 @@ Segment::Segment(Vector origin, Vector direction)
 {
 }
 
-Segment::Segment(double x, double y, Vector direction)
+Segment::Segment(float x, float y, Vector direction)
 	: origin_(x, y)
 	, direction_(direction)
 {
 }
 
-Segment::Segment(double x, double y, double x2, double y2)
+Segment::Segment(float x, float y, float x2, float y2)
 	: origin_(x, y)
 	, direction_(x2 - x, y2 - y)
 {
@@ -49,8 +49,8 @@ bool Segment::intersection(Segment& a, Segment& b)
 		if ((b.origin() - a.origin()) % a.direction() == 0) {
 
 			// find the t0, t1 such as [ao + t0 * ad == bo] and [ao + t1 * ad == bo + bd]
-			double t0 = ((b.origin() - a.origin()) * a.direction()) / (a.direction() * a.direction());
-			double t1 = t0 + ((b.direction() * a.direction()) / (a.direction() * a.direction()));
+			float t0 = ((b.origin() - a.origin()) * a.direction()) / (a.direction() * a.direction());
+			float t1 = t0 + ((b.direction() * a.direction()) / (a.direction() * a.direction()));
 
 			// if the interval t0:t1 intersects 0:1, then the segments partially overlap
 			if ((t0 >= 0 && t0 <= 1) || (t1 >= 0 && t1 <= 1)) {
@@ -74,8 +74,8 @@ bool Segment::intersection(Segment& a, Segment& b)
 	// if [ad x bd != 0] then both segment might intersect (they would if they were infinite)
 	} else {
 		// find the u,t such as [ao + t * ad == bo + t * bd]
-		double t = (b.origin() - a.origin()) % b.direction() / (a.direction() % b.direction());
-		double u = (b.origin() - a.origin()) % a.direction() / (a.direction() % b.direction());
+		float t = (b.origin() - a.origin()) % b.direction() / (a.direction() % b.direction());
+		float u = (b.origin() - a.origin()) % a.direction() / (a.direction() % b.direction());
 
 		// if both u and t are within the [0:1], the intersection is within both segments' intervals
 		if (0 <= u && u <= 1 && 0 <= t && t <= 1) {
@@ -93,8 +93,8 @@ void Segment::render()
 {
 	al_draw_line(origin_.x(), origin_.y(), origin_.x() + direction_.x(), origin_.y() + direction_.y(), al_map_rgb(255, 0, 255), 0);
 
-	//al_draw_filled_circle(origin_.x(), origin_.y(), 3, al_map_rgb(0, 255, 0));
-	//al_draw_filled_circle(origin_.x() + direction_.x(), origin_.y() + direction_.y(), 3, al_map_rgb(0, 255, 0));
+	al_draw_filled_circle(origin_.x(), origin_.y(), 3, al_map_rgb(0, 255, 0));
+	al_draw_filled_circle(origin_.x() + direction_.x(), origin_.y() + direction_.y(), 3, al_map_rgb(0, 255, 0));
 }
 
 } //namespace hc

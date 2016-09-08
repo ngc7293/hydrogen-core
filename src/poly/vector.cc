@@ -8,7 +8,7 @@
 
 namespace hc {
 
-Vector::Vector(double x, double y)
+Vector::Vector(float x, float y)
 	: x_(x)
 	, y_(y)
 {
@@ -48,17 +48,17 @@ Vector Vector::operator*(int k)
 	return Vector(k * x_, k * y_);
 }
 
-Vector Vector::operator*(double k)
+Vector Vector::operator*(float k)
 {
 	return Vector(k * x_, k * y_);
 }
 
-double Vector::operator*(Vector vec)
+float Vector::operator*(Vector vec)
 {
 	return x_ * vec.x() + y_ * vec.y();
 }
 
-double Vector::operator%(Vector vec)
+float Vector::operator%(Vector vec)
 {
 	return x_ * vec.y() - y_ * vec.x();
 }
@@ -71,16 +71,16 @@ Vector Vector::proj(Vector vec)
 	return Vector(vec.x(), vec.y()) * ((*this * vec) / (vec * vec));
 }
 
-void Vector::set_norm(double norm)
+void Vector::set_norm(float norm)
 {
-	double angle = Vector::angle();
+	float angle = Vector::angle();
 	x_ = norm * cos(angle);
 	y_ = norm * sin(angle);
 }
 
-void Vector::set_angle(double angle)
+void Vector::set_angle(float angle)
 {
-	double norm = Vector::norm();
+	float norm = Vector::norm();
 	x_ = norm * cos(angle);
 	y_ = norm * sin(angle);
 }

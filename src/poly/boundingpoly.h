@@ -9,21 +9,26 @@ namespace hc {
 
 class BoundingPoly {
 private:
-	double x_, y_;
+	Vector origin_;
 	std::vector<Segment> segments_;
 
 public:
 	static bool collision(BoundingPoly& a, BoundingPoly& b);
 
 public:	
-	BoundingPoly(double x, double y);
-	BoundingPoly(double x, double y, std::vector<Segment> segments);
+	BoundingPoly(float x, float y);
+	BoundingPoly(float x, float y, std::vector<Segment> segments);
 	~BoundingPoly();
+
+	void rotate(float angle);
+
+	void render();
 
 	void add(Segment segment);
 
-	void move(double dx, double dy);
+	void move(float dx, float dy);
 
+	Vector& origin() { return origin_; }
 	std::vector<Segment>& segments() { return segments_; }
 
 };
