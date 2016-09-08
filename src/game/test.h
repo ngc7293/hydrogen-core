@@ -1,23 +1,23 @@
 #include "object.h"
 
-#include "segment.h"
+#include "boundingpoly.h"
 
 #ifndef TEST_H_
 #define TEST_H_
 
 class Test : public hc::Object {
 private:
-	hc::Segment s_;
+	double x_, y_;
+	hc::BoundingPoly poly_;
 
 public:
-	Test(double x, double y, hc::Vector vec);
-	Test(double x, double y, double x2, double y2);
+	Test(double x, double y);
 	virtual ~Test();
 
 	virtual void update();
 	virtual void render();
 
-	hc::Segment& s() { return s_; }
+	hc::BoundingPoly& poly() { return poly_; }
 };
 
 #endif

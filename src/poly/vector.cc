@@ -16,10 +16,22 @@ Vector::Vector(double x, double y)
 
 Vector::~Vector() {}
 
+bool Vector::operator==(Vector vec)
+{
+	return (x_ == vec.x() && y_ == vec.y());
+}
+
 Vector Vector::operator+(Vector vec)
 {
 	return Vector(x_ + vec.x(), y_ + vec.y());
 }
+
+void Vector::operator+=(Vector vec)
+{
+	x_ += vec.x();
+	y_ += vec.y();
+}
+
 
 Vector Vector::operator*(int k)
 {
@@ -42,22 +54,6 @@ Vector Vector::proj(Vector vec)
 		return Vector(0, 0);
 
 	return Vector(vec.x(), vec.y()) * ((*this * vec) / (vec * vec));
-}
-
-void Vector::set_x(double x)
-{
-	set_components(x, y_);
-}
-
-void Vector::set_y(double y)
-{
-	set_components(x_, y);
-}
-
-void Vector::set_components(double x, double y)
-{
-	x_ = x;
-	y_ = y;
 }
 
 void Vector::set_norm(double norm)

@@ -6,19 +6,19 @@
 #include "game.h"
 #include "input.h"
 #include "manager.h"
+#include "boundingpoly.h"
 #include "segment.h"
-#include "vector.h"
 
-Test::Test(double x, double y, hc::Vector vec)
-	: Object(TEST)
-	, s_(x, y, vec)
+Test::Test(double x, double y)
+    : Object(TEST)
+    , x_(x)
+    , y_(y)
+    , poly_(x, y)
 {
-}
-
-Test::Test(double x, double y, double x2, double y2)
-	: Object(TEST)
-	, s_(x, y, x2, y2)
-{
+	poly_.add(hc::Segment(x-16, y - 16, x + 64, y-16));
+	poly_.add(hc::Segment(x + 64, y - 16, x, y + 64));
+	poly_.add(hc::Segment(x, y + 64, x - 64, y));
+	poly_.add(hc::Segment(x - 64, y, x - 16	, y - 16));
 }
 
 Test::~Test()
@@ -30,23 +30,21 @@ void Test::update()
 	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (t == this) {
 		hc::Input* input = hc::Game::game()->input();
-		s_.direction() = hc::Vector(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
+		poly_.move(input->mx() - x_, input->my() - y_);
+		x_ = input->mx();
+		y_ = input->my();
+	}
+
+	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
+	for (unsigned int i(0); i < tests.size(); i++) {
+		t = static_cast<Test*>(tests[i]);
+		hc::BoundingPoly::collision(poly_, t->poly());
 	}
 }
 
 void Test::render()
 {
-	s_.render();
-
-	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
-
-	for (unsigned int i(0); i < tests.size(); i++) {
-		Test* t = static_cast<Test*>(tests[i]);
-
-		if (t != this) {
-			hc::Vector pos = hc::Segment::intersection(s_, t->s());
-			if (!(pos.x() == 0 && pos.y() == 0))
-				al_draw_filled_circle(pos.x(), pos.y(), 3, al_map_rgb(255, 0, 0));
-		}	
-	}
+	for (unsigned int i(0); i < poly_.segments().size(); i++)
+		poly_.segments()[i].render();
+	al_draw_filled_circle(x_, y_, 4, al_map_rgb(255, 255, 255));
 }

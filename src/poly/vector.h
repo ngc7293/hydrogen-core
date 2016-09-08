@@ -14,6 +14,9 @@ public:
 	~Vector();
 
 	// Algebric operations
+	bool operator==(Vector vec);
+
+	void operator+=(Vector vec);
 	Vector operator+(Vector vec);
 
 	Vector operator*(int k);
@@ -24,20 +27,20 @@ public:
 	// Projection of this vector on vector 'vec'
 	Vector proj(Vector vec);
 
-	// Access to members
-	void set_x(double x);
-	void set_y(double y);
+	// Setting components
+	void set_x(double x) { x_ = x; }
+	void set_y(double y) { y_ = y; }
 
-	// Note you could simply use a new constructor...
-	// FIXME: Is this even needed?
-	void set_components(double x, double y);
-
+	// Setting through geometric values. These have a longer
+	// implementation, and can be found in the .cc file
 	void set_norm(double norm);
 	void set_angle(double angle);
 
+	// Reading componenents
 	double x() { return x_; }
 	double y() { return y_; }
 
+	// Reading geometric values
 	double norm() { return sqrt(pow(x_, 2) + pow(y_, 2)); }
 	double angle() { return atan2(y_, x_); }
 

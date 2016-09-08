@@ -10,7 +10,7 @@ private:
 	Vector origin_, direction_;
 
 public:
-	static Vector intersection(Segment a, Segment b);
+	static bool intersection(Segment& a, Segment& b);
 
 public:
 	Segment(Vector origin, Vector director);

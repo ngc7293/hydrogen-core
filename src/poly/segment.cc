@@ -7,30 +7,37 @@
 #include <allegro5/allegro_primitives.h>
 #endif
 
+#include "../hc/defaults.h"
+
 namespace hc {
 
 Segment::Segment(Vector origin, Vector direction)
-	: origin_(origin)
-	, direction_(direction)
+    : origin_(origin)
+    , direction_(direction)
 {
 }
 
 Segment::Segment(double x, double y, Vector direction)
-	: origin_(x, y)
-	, direction_(direction)
+    : origin_(x, y)
+    , direction_(direction)
 {
 }
 
 Segment::Segment(double x, double y, double x2, double y2)
-	: origin_(x, y)
-	, direction_(x2 - x, y2 - y)
+    : origin_(x, y)
+    , direction_(x2 - x, y2 - y)
 {
 }
 
 Segment::~Segment() {}
 
-Vector Segment::intersection(Segment a, Segment b)
+bool Segment::intersection(Segment& a, Segment& b)
 {
+	if (a.direction().angle() == 0 || a.direction().angle() == PI)
+		return false;
+	if (b.direction().angle() == 0 || b.direction().angle() == PI)
+		return false;
+
 	double a_slope = a.direction().y() / a.direction().x();
 	double a_intercept = a.origin().y() - a_slope * a.origin().x();
 
@@ -44,16 +51,18 @@ Vector Segment::intersection(Segment a, Segment b)
 	double max = (a.direction().x() > 0 ? a.origin().x() + a.direction().x() : a.origin().x());
 
 	if (x < min || x > max)
-		return Vector(0, 0);
+		return false;
 
 	// Check if x is within b
 	min = (b.direction().x() > 0 ? b.origin().x() : b.origin().x() + b.direction().x());
 	max = (b.direction().x() > 0 ? b.origin().x() + b.direction().x() : b.origin().x());
-	
-	if (x < min || x > max)
-		return Vector(0, 0);
 
-	return Vector(x, a_slope * x + a_intercept);
+	if (x < min || x > max)
+		return false;
+
+	al_draw_filled_circle(x, a_slope * x + a_intercept, 3, al_map_rgb(255,255,0));
+
+	return true;
 }
 
 void Segment::render()
