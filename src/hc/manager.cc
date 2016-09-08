@@ -5,6 +5,8 @@
 
 #include "object.h"
 
+namespace hc {
+
 Manager::Manager() {}
 
 Manager::~Manager()
@@ -79,3 +81,5 @@ void Manager::render()
 	for (unsigned int i(0); i < objects_.size(); i++)
 		objects_[i]->render();
 }
+
+} //namespace hc

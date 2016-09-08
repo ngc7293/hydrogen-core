@@ -2,8 +2,8 @@
 
 int main(int argc, char const* argv[])
 {
-	/* Setup the Game object */
-	Game* game = Game::game();
+	// Setup the Game object
+	hc::Game* game = hc::Game::game();
 
 	/* Run the game loop */
 	while (game->loop())
