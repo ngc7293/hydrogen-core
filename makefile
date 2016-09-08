@@ -13,7 +13,7 @@ all: hc
 
 hc: $(COREOBJS) $(GAMEOBJS)
 	@echo $@
-	@$(CXX) -o $@ $^ $(ALLEG)
+	@$(CXX) -o $@ $^.o $(ALLEG)
 
 obj/hc/%.o: src/hc/%.cc
 	@echo $<
