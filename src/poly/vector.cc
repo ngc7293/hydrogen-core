@@ -32,6 +32,16 @@ void Vector::operator+=(Vector vec)
 	y_ += vec.y();
 }
 
+Vector Vector::operator-(Vector vec)
+{
+	return Vector(x_ - vec.x(), y_ - vec.y());
+}
+
+void Vector::operator-=(Vector vec)
+{
+	x_ -= vec.x();
+	y_ -= vec.y();
+}
 
 Vector Vector::operator*(int k)
 {
@@ -46,6 +56,11 @@ Vector Vector::operator*(double k)
 double Vector::operator*(Vector vec)
 {
 	return x_ * vec.x() + y_ * vec.y();
+}
+
+double Vector::operator%(Vector vec)
+{
+	return x_ * vec.y() - y_ * vec.x();
 }
 
 Vector Vector::proj(Vector vec)

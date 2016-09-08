@@ -16,13 +16,18 @@ public:
 	// Algebric operations
 	bool operator==(Vector vec);
 
-	void operator+=(Vector vec);
 	Vector operator+(Vector vec);
+	void operator+=(Vector vec);
+
+	Vector operator-(Vector vec);
+	void operator-=(Vector vec);
+
 
 	Vector operator*(int k);
 	Vector operator*(double k);
 
 	double operator*(Vector vec);
+	double operator%(Vector vec);
 
 	// Projection of this vector on vector 'vec'
 	Vector proj(Vector vec);

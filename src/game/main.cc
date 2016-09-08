@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include <iostream>
+
 #include "manager.h"
 #include "vector.h"
 
@@ -12,8 +14,8 @@ int main(int argc, char const* argv[])
 
 	game->manager()->add(new Test(120, 120));
 	game->manager()->add(new Test(528, 064));
+	game->manager()->add(new Test(528, 050));
 	game->manager()->add(new Test(DEFAULT_SCREEN_WIDTH / 2, DEFAULT_SCREEN_HEIGHT / 2));
-
 
 	// Run the game loop
 	while (game->loop())

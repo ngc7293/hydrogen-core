@@ -38,7 +38,8 @@ void Test::update()
 	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
 	for (unsigned int i(0); i < tests.size(); i++) {
 		t = static_cast<Test*>(tests[i]);
-		hc::BoundingPoly::collision(poly_, t->poly());
+		if (t != this)
+			hc::BoundingPoly::collision(poly_, t->poly());
 	}
 }
 
