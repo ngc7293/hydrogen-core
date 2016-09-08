@@ -1,26 +1,28 @@
 #include <cmath>
 
-#ifndef VECTOR2D_H_
-#define VECTOR2D_H_
+#ifndef VECTOR_H_
+#define VECTOR_H_
 
-class Vector2d {
+namespace hc {
+
+class Vector {
 private:
 	double x_, y_;
 
 public:
-	Vector2d(double x, double y);
-	~Vector2d();
+	Vector(double x, double y);
+	~Vector();
 
 	// Algebric operations
-	Vector2d operator+(Vector2d vec);
+	Vector operator+(Vector vec);
 
-	Vector2d operator*(int k);
-	Vector2d operator*(double k);
+	Vector operator*(int k);
+	Vector operator*(double k);
 
-	double operator*(Vector2d vec);
+	double operator*(Vector vec);
 
 	// Projection of this vector on vector 'vec'
-	Vector2d proj(Vector2d vec);
+	Vector proj(Vector vec);
 
 	// Access to members
 	void set_x(double x);
@@ -43,5 +45,7 @@ public:
 	void print();
 #endif
 };
+
+} //namespace hc
 
 #endif

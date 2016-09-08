@@ -6,8 +6,10 @@
 #include "game.h"
 #include "input.h"
 #include "manager.h"
+#include "segment.h"
+#include "vector.h"
 
-Test::Test(double x, double y, Vector2d vec)
+Test::Test(double x, double y, hc::Vector vec)
 	: Object(TEST)
 	, s_(x, y, vec)
 {
@@ -28,7 +30,7 @@ void Test::update()
 	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (t == this) {
 		hc::Input* input = hc::Game::game()->input();
-		s_.direction() = Vector2d(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
+		s_.direction() = hc::Vector(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
 	}
 }
 
@@ -42,7 +44,7 @@ void Test::render()
 		Test* t = static_cast<Test*>(tests[i]);
 
 		if (t != this) {
-			Vector2d pos = Segment2d::intersection(s_, t->s());
+			hc::Vector pos = hc::Segment::intersection(s_, t->s());
 			if (!(pos.x() == 0 && pos.y() == 0))
 				al_draw_filled_circle(pos.x(), pos.y(), 3, al_map_rgb(255, 0, 0));
 		}	
