@@ -27,7 +27,7 @@ private:
 	State mousebutton_[MOUSE_BUTTON_MAX];
 
 	// The mouses axis
-	double mx_, my_, mz_;
+	float mx_, my_, mz_;
 
 public:
 	Input();
@@ -47,13 +47,13 @@ public:
 	bool isMouseButton(State state, int button);
 
 	// Return the mouse x (relative to the display)
-	double mx() { return mx_; }
+	float mx() { return mx_; }
 
 	// Return the mouse y (relative to the display)
-	double my() { return my_; }
+	float my() { return my_; }
 
 	// Return the mouse z (relative to the display)
-	double mz() { return mz_; }
+	float mz() { return mz_; }
 };
 
 } //namespace hc
