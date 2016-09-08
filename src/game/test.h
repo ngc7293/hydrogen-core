@@ -5,7 +5,7 @@
 #ifndef TEST_H_
 #define TEST_H_
 
-class Test : public Object {
+class Test : public hc::Object {
 private:
 	Segment2d s_;
 

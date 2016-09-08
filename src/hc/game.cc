@@ -13,42 +13,44 @@
 #include "input.h"
 #include "manager.h"
 
+namespace hc {
+
 Game::Game()
 {
-	/* Assume user has done no setup */
+	// Assume user has done no setup
 	srand(time(0));
 
-	/* Initiate the allegro library and addons */
+	// Initiate the allegro library and addons
 	al_init();
 	al_init_font_addon();
 	al_init_image_addon();
 	al_init_primitives_addon();
 	al_init_ttf_addon();
 
-	/* Install input devices */
+	// Install input devices
 	al_install_keyboard();
 	al_install_mouse();
 
-	/* Modules */
+	// Modules
 	input_ = new Input();
 	manager_ = new Manager();
 	media_ = new Media();
 
-	/* Flags */
+	// Flags
 	run_ = true;
 	render_ = false;
 
-	/* Display */
+	// Display
 	al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 8, ALLEGRO_SUGGEST);
 	display_ = al_create_display(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 
-	/* Timer */
+	// Timer
 	timer_ = al_create_timer(1.0 / DEFAULT_GAME_SPEED);
 	al_start_timer(timer_);
 
-	/* Event Queue */
+	// Event Queue
 	eventqueue_ = al_create_event_queue();
 
 	al_register_event_source(eventqueue_, al_get_display_event_source(display_));
@@ -84,18 +86,20 @@ bool Game::loop()
 		render_ = true;
 	}
 
-	/* Do not render if there are still events to be processed. Partially
-	 * prevents the game from lagging because of a long render() */
+	// Do not render if there are still events to be processed. Partially
+	// prevents the game from lagging because of a long render()
 	if (render_ && al_event_queue_is_empty(eventqueue_)) {
 		render_ = false;
 
-		/* Tell the objects to render */
+		// Tell the objects to render
 		manager_->render();
 
-		/* Flip the buffer, and clear it */
+		// Flip the buffer, and clear it
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 	}
 
 	return run_;
 }
+
+} // namespace hc

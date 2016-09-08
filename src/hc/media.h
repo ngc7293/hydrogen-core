@@ -7,6 +7,8 @@
 #ifndef MEDIA_H_
 #define MEDIA_H_
 
+namespace hc {
+
 class Media {
 public:
 	struct Bitmap {
@@ -28,9 +30,11 @@ public:
 	Media();
 	~Media();
 
-	/* Load image from file */
+	// Load image from file
 	ALLEGRO_BITMAP* image(std::string file);
 	ALLEGRO_FONT* font(std::string file, int size);
 };
+
+} //namespace hc
 
 #endif

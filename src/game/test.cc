@@ -25,9 +25,9 @@ Test::~Test()
 
 void Test::update()
 {
-	Test* t = static_cast<Test*>(Game::game()->manager()->first(TEST));
+	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (t == this) {
-		Input* input = Game::game()->input();
+		hc::Input* input = hc::Game::game()->input();
 		s_.director() = Vector2d(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
 	}
 }
@@ -36,7 +36,7 @@ void Test::render()
 {
 	s_.render();
 
-	std::vector<Object*> tests = Game::game()->manager()->all(TEST);
+	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
 
 	for (unsigned int i(0); i < tests.size(); i++) {
 		Test* t = static_cast<Test*>(tests[i]);

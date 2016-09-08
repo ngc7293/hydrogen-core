@@ -6,7 +6,7 @@
 int main(int argc, char const* argv[])
 {
 	// Setup the Game object
-	Game* game = Game::game();
+	hc::Game* game = hc::Game::game();
 
 		game->manager()->add(new Test(DEFAULT_SCREEN_WIDTH / 2, DEFAULT_SCREEN_HEIGHT / 2, 0, 0));
 
