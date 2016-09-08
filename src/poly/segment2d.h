@@ -5,7 +5,7 @@
 
 class Segment2d {
 private:
-	Vector2d origin_, director_;
+	Vector2d origin_, direction_;
 
 public:
 	static Vector2d intersection(Segment2d a, Segment2d b);
@@ -17,7 +17,7 @@ public:
 	~Segment2d();
 
 	Vector2d& origin() { return origin_; }
-	Vector2d& director() { return director_; }
+	Vector2d& direction() { return direction_; }
 
 #ifdef _DEBUG
 	void render();

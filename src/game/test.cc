@@ -28,7 +28,7 @@ void Test::update()
 	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (t == this) {
 		hc::Input* input = hc::Game::game()->input();
-		s_.director() = Vector2d(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
+		s_.direction() = Vector2d(input->mx() - s_.origin().x(), input->my() - s_.origin().y());
 	}
 }
 
