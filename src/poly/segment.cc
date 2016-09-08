@@ -33,9 +33,14 @@ Segment::~Segment() {}
 
 bool Segment::intersection(Segment& a, Segment& b)
 {
-	// to keep the comments readable I have shortened a.origin to ao and a.direction to ad
-	// remember that hc::Vector overloads the % operator as a cross-product operator
-	// such as [v x w] is written [v % w]
+	// Most of the credit for this algorithm goes to Stack Overflow user Gareth Rees.
+	// This is essentially a step-step C++ copy of his answer linked below.
+	// http://stackoverflow.com/a/565282
+
+	// To keep the comments readable I have shortened 'a.origin' to 'ao' and 'a.direction' to 'ad'.
+	// Same goes for 'b.origin' and 'b.direction'.
+
+	// Remember that hc::Vector overloads the % operator as a cross-product operator
 
 	// if [ad x bd == 0] then both vectors are parallel
 	if (a.direction() % b.direction() == 0) {
@@ -65,6 +70,7 @@ bool Segment::intersection(Segment& a, Segment& b)
 		} else {
 			return false;
 		}
+
 	// if [ad x bd != 0] then both segment might intersect (they would if they were infinite)
 	} else {
 		// find the u,t such as [ao + t * ad == bo + t * bd]
