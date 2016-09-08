@@ -31,6 +31,47 @@ Segment::Segment(float x, float y, float x2, float y2)
 
 Segment::~Segment() {}
 
+float Segment::mindistance(Segment& a, Segment& b)
+{
+	float cur, min;
+
+	// Try all combinations
+	min = mindistance(a, b.origin());
+
+	cur = mindistance(a, b.origin() + b.direction());
+	min = (min > cur ? cur : min);
+
+	cur = mindistance(b, a.origin());
+	min = (min > cur ? cur : min);
+
+	cur = mindistance(b, a.origin() + a.direction());
+	min = (min > cur ? cur : min);
+
+	return min;
+}
+
+float Segment::mindistance(Segment& a, Vector p)
+{
+	// If segment 'a' is a point (length 0), return the distance(a, p)
+	if (a.direction() == Vector(0, 0))
+		return sqrt(pow(a.origin().x() - p.x(), 2) + pow(a.origin().y() - p.y(), 2));
+
+	// Find the closest point on line 'a' with the form [ao + t * ad]
+	float t = ((p - a.origin()) * a.direction()) / (a.direction() * a.direction());
+
+	// Cap 't' to the interval 0:1, to keep it within the segment
+	t = (t < 0 ? 0 : (t > 1 ? 1 : t));
+
+	// Find the distance(ao + t * ad, t)
+	float dis = sqrt(pow((a.origin() + (a.direction() * t)).x() - p.x(), 2) + pow((a.origin() + (a.direction() * t)).y() - p.y(), 2));
+
+	if (dis < 100) {
+		al_draw_line((a.origin() + (a.direction() * t)).x(), (a.origin() + (a.direction() * t)).y(),
+			p.x(), p.y(), al_map_rgb(127, 127, 127), 2);
+	}
+	return dis;
+}
+
 bool Segment::intersection(Segment& a, Segment& b)
 {
 	// Most of the credit for this algorithm goes to Stack Overflow user Gareth Rees.
@@ -71,7 +112,7 @@ bool Segment::intersection(Segment& a, Segment& b)
 			return false;
 		}
 
-	// if [ad x bd != 0] then both segment might intersect (they would if they were infinite)
+		// if [ad x bd != 0] then both segment might intersect (they would if they were infinite)
 	} else {
 		// find the u,t such as [ao + t * ad == bo + t * bd]
 		float t = (b.origin() - a.origin()) % b.direction() / (a.direction() % b.direction());

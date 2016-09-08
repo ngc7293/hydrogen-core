@@ -13,6 +13,7 @@ private:
 	std::vector<Segment> segments_;
 
 public:
+	static float mindistance(BoundingPoly& a, BoundingPoly& b);
 	static bool collision(BoundingPoly& a, BoundingPoly& b);
 
 public:	

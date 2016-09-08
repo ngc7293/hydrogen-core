@@ -30,8 +30,8 @@ Test::~Test()
 
 void Test::update()
 {
-	Test* t = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
-	if (t == this) {
+	Test* first = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
+	if (first == this) {
 		hc::Input* input = hc::Game::game()->input();
 		poly_.move(input->mx(), input->my());
 		x_ = input->mx();
@@ -43,9 +43,11 @@ void Test::update()
 
 	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
 	for (unsigned int i(0); i < tests.size(); i++) {
-		t = static_cast<Test*>(tests[i]);
+		Test* t = static_cast<Test*>(tests[i]);
 		if (t != this)
 			hc::BoundingPoly::collision(poly_, t->poly());
+		if (first == this && t != this)
+			hc::BoundingPoly::mindistance(poly_, t->poly());
 	}
 }
 
