@@ -12,11 +12,11 @@ GAMEOBJS = $(patsubst src/game/%.cc,obj/game/%.o,$(GAMESRCS))
 POLYSRCS = $(wildcard src/poly/*.cc)
 POLYOBJS = $(patsubst src/poly/%.cc,obj/poly/%.o,$(POLYSRCS))
 
-all: hc
+all: hc.o
 
-hc: $(COREOBJS) $(GAMEOBJS) $(POLYOBJS)
+hc.o: $(COREOBJS) $(GAMEOBJS) $(POLYOBJS)
 	@echo $@
-	@$(CXX) -o $@.o $^ $(ALLEG)
+	@$(CXX) -o $@ $^ $(ALLEG)
 
 obj/hc/%.o: src/hc/%.cc
 	@echo $<
