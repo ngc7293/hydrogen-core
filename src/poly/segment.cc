@@ -11,6 +11,13 @@
 
 namespace hc {
 
+
+Segment::Segment()
+	: origin_(0, 0)
+	, direction_(0, 0)
+{
+}
+
 Segment::Segment(Vector origin, Vector direction)
 	: origin_(origin)
 	, direction_(direction)
@@ -65,10 +72,12 @@ float Segment::mindistance(Segment& a, Vector p)
 	// Find the distance(ao + t * ad, t)
 	float dis = sqrt(pow((a.origin() + (a.direction() * t)).x() - p.x(), 2) + pow((a.origin() + (a.direction() * t)).y() - p.y(), 2));
 
+#ifdef _DEBUG
 	if (dis < 100) {
 		al_draw_line((a.origin() + (a.direction() * t)).x(), (a.origin() + (a.direction() * t)).y(),
 			p.x(), p.y(), al_map_rgb(127, 127, 127), 2);
 	}
+#endif
 	return dis;
 }
 

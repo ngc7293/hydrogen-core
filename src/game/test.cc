@@ -15,8 +15,8 @@ Test::Test(float x, float y)
 	, y_(y)
 	, poly_(x, y)
 {
-	hc::Vector p1(-(rand() % 64), -(rand() % 64));
-	hc::Vector p2((rand() % 64), -(rand() % 64));
+	hc::Vector p1(-16, -32);
+	hc::Vector p2( 16 + (rand() % 48), -32);
 	hc::Vector p3((rand() % 48) - 24, (rand() % 48) + 16);
 
 	poly_.add(hc::Segment(p1.x(), p1.y(), p2.x(), p2.y()));

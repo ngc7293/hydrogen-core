@@ -15,6 +15,10 @@ public:
 	static bool intersection(Segment& a, Segment& b);
 
 public:
+	// Default constructor (0,0,0,0)
+	Segment();
+	
+	// This might need to be changed into origin, endpoint, which is more often needed
 	Segment(Vector origin, Vector director);
 	Segment(float x, float y, Vector director);
 	Segment(float x, float y, float x2, float y2);

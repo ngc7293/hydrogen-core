@@ -25,8 +25,7 @@ BoundingPoly::~BoundingPoly() {}
 
 float BoundingPoly::mindistance(BoundingPoly& a, BoundingPoly& b)
 {
-	Segment from_a(0, 0, 0, 0);
-	Segment from_b(0, 0, 0, 0);
+	Segment from_a, from_b;
 	Segment ab(a.origin().x(), a.origin().y(), b.origin().x(), b.origin().y());
 
 	for (unsigned int i(0); i < a.segments().size(); i++) {
@@ -54,6 +53,9 @@ float BoundingPoly::mindistance(BoundingPoly& a, BoundingPoly& b)
 
 bool BoundingPoly::collision(BoundingPoly& a, BoundingPoly& b)
 {
+	if ((pow(a.origin().x() - b.origin().x(),2) + pow(a.origin().y() - b.origin().y(),2)) > pow(a.radius() + b.radius(), 2))
+		return false;
+
 	// FIXME: It would be best to avoid actually changing the values is possible.
 	// This might require making Segment::intersection not use references
 	// Would this affect performance? Should that also be avoided?
@@ -76,6 +78,8 @@ bool BoundingPoly::collision(BoundingPoly& a, BoundingPoly& b)
 void BoundingPoly::add(Segment segment)
 {
 	segments_.push_back(segment);
+	radius_ = (radius_ > segment.origin().norm() ? radius_ : segment.origin().norm());
+	radius_ = (radius_ > Vector(segment.origin() + segment.direction()).norm() ? radius_ : Vector(segment.origin() + segment.direction()).norm());
 }
 
 void BoundingPoly::move(float x, float y)
@@ -91,11 +95,14 @@ void BoundingPoly::rotate(float angle)
 	}
 }
 
+#ifdef _DEBUG
 void BoundingPoly::render()
 {
+	al_draw_circle(origin_.x(), origin_.y(), radius_, al_map_rgb(0, 0, 255), 2);
 	for (unsigned int i(0); i < segments_.size(); i++)
 		Segment(segments_[i].origin() + origin_, segments_[i].direction()).render();
 	al_draw_filled_circle(origin_.x(), origin_.y(), 3, al_map_rgb(255, 255, 255));
 }
+#endif
 
 } //namespace hc
