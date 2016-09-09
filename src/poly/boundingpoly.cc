@@ -25,22 +25,31 @@ BoundingPoly::~BoundingPoly() {}
 
 float BoundingPoly::mindistance(BoundingPoly& a, BoundingPoly& b)
 {
-	float min(-1), cur;
+	Segment from_a(0, 0, 0, 0);
+	Segment from_b(0, 0, 0, 0);
+	Segment ab(a.origin().x(), a.origin().y(), b.origin().x(), b.origin().y());
 
 	for (unsigned int i(0); i < a.segments().size(); i++) {
-		for (unsigned int j(0); j < b.segments().size(); j++) {
-			a.segments()[i].origin() += a.origin();
-			b.segments()[j].origin() += b.origin();
-
-			cur = Segment::mindistance(a.segments()[i], b.segments()[j]);
-			min = (min == -1 ? cur : (min > cur ? cur : min));
-
+		a.segments()[i].origin() += a.origin();
+		if (Segment::intersection(a.segments()[i], ab)) {
+			from_a = a.segments()[i];
 			a.segments()[i].origin() -= a.origin();
-			b.segments()[j].origin() -= b.origin();
+			break;
 		}
+		a.segments()[i].origin() -= a.origin();
 	}
 
-	return min;
+	for (unsigned int i(0); i < b.segments().size(); i++) {
+		b.segments()[i].origin() += b.origin();
+		if (Segment::intersection(b.segments()[i], ab)) {
+			from_b = b.segments()[i];
+			b.segments()[i].origin() -= b.origin();
+			break;
+		}
+		b.segments()[i].origin() -= b.origin();
+	}
+
+	return Segment::mindistance(from_a, from_b);
 }
 
 bool BoundingPoly::collision(BoundingPoly& a, BoundingPoly& b)
