@@ -37,7 +37,7 @@ ALLEGRO_BITMAP* Media::image(std::string file)
 	}
 
 	// Load and add to the database
-	al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_MIPMAP);
+	al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_MIPMAP | ALLEGRO_CONVERT_BITMAP);
 
 	Bitmap img;
 	img.file = file;
@@ -59,6 +59,8 @@ ALLEGRO_FONT* Media::font(std::string file, int size)
 			return fonts_[i].font;
 		}
 	}
+
+	al_set_new_bitmap_flags(ALLEGRO_CONVERT_BITMAP);
 
 	Font fnt;
 	fnt.file = file;
