@@ -28,6 +28,8 @@ float BoundingPoly::mindistance(BoundingPoly& a, BoundingPoly& b)
 	Segment from_a, from_b;
 	Segment ab(a.origin().x(), a.origin().y(), b.origin().x(), b.origin().y());
 
+	// Note: This logic only works if both BoundingPoly are convex. 
+	// If either are concave, this might return an incorrect value.
 	for (unsigned int i(0); i < a.segments().size(); i++) {
 		a.segments()[i].origin() += a.origin();
 		if (Segment::intersection(a.segments()[i], ab)) {
@@ -53,17 +55,22 @@ float BoundingPoly::mindistance(BoundingPoly& a, BoundingPoly& b)
 
 bool BoundingPoly::collision(BoundingPoly& a, BoundingPoly& b)
 {
-	if ((pow(a.origin().x() - b.origin().x(),2) + pow(a.origin().y() - b.origin().y(),2)) > pow(a.radius() + b.radius(), 2))
+	// Compare squared values, because sqrt() is very expensive
+	if (distance_sq(a.origin(), b.origin()) > pow(a.radius() + b.radius(), 2))
 		return false;
 
 	// FIXME: It would be best to avoid actually changing the values is possible.
 	// This might require making Segment::intersection not use references
 	// Would this affect performance? Should that also be avoided?
+	// FIXME: This checks all collisions. Maybe create a different function that stops 
+	// as soon as it finds one.
+
+	bool result(false);
 	for (unsigned int i(0); i < a.segments().size(); i++) {
 		for (unsigned int j(0); j < b.segments().size(); j++) {
 			a.segments()[i].origin() += a.origin();
 			b.segments()[j].origin() += b.origin();
-			bool result = Segment::intersection(a.segments()[i], b.segments()[j]);
+			result = (result ? true : Segment::intersection(a.segments()[i], b.segments()[j]));
 			a.segments()[i].origin() -= a.origin();
 			b.segments()[j].origin() -= b.origin();
 
@@ -72,14 +79,20 @@ bool BoundingPoly::collision(BoundingPoly& a, BoundingPoly& b)
 			//return true?;
 		}
 	}
-	return false;
+	return result;
 }
 
 void BoundingPoly::add(Segment segment)
 {
 	segments_.push_back(segment);
-	radius_ = (radius_ > segment.origin().norm() ? radius_ : segment.origin().norm());
-	radius_ = (radius_ > Vector(segment.origin() + segment.direction()).norm() ? radius_ : Vector(segment.origin() + segment.direction()).norm());
+
+	// Take the longest radius
+	radius_ = (radius_ > segment.origin().length() ? radius_ : segment.origin().length());
+
+	// Compare squared values, because sqrt() is very expensive
+	// This is only needed if the polygon is not closed.
+	// FIXME: Is this needed?
+	radius_ = (pow(radius_,2) > Vector(segment.origin() + segment.direction()).length_sq() ? radius_ : Vector(segment.origin() + segment.direction()).length());
 }
 
 void BoundingPoly::move(float x, float y)

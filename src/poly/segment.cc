@@ -7,7 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 #endif
 
-#include "../hc/defaults.h"
+#include "trig.h"
 
 namespace hc {
 
@@ -61,7 +61,7 @@ float Segment::mindistance(Segment& a, Vector p)
 {
 	// If segment 'a' is a point (length 0), return the distance(a, p)
 	if (a.direction() == Vector(0, 0))
-		return sqrt(pow(a.origin().x() - p.x(), 2) + pow(a.origin().y() - p.y(), 2));
+		return distance(a.origin(), p);
 
 	// Find the closest point on line 'a' with the form [ao + t * ad]
 	float t = ((p - a.origin()) * a.direction()) / (a.direction() * a.direction());
@@ -70,7 +70,7 @@ float Segment::mindistance(Segment& a, Vector p)
 	t = (t < 0 ? 0 : (t > 1 ? 1 : t));
 
 	// Find the distance(ao + t * ad, t)
-	float dis = sqrt(pow((a.origin() + (a.direction() * t)).x() - p.x(), 2) + pow((a.origin() + (a.direction() * t)).y() - p.y(), 2));
+	float dis = distance(a.origin() + a.direction() * t, p);
 
 #ifdef _DEBUG
 	if (dis < 100) {
