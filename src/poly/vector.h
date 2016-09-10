@@ -38,7 +38,7 @@ public:
 
 	// Setting through geometric values. These have a longer
 	// implementation, and can be found in the .cc file
-	void set_norm(float norm);
+	void set_length(float length);
 	void set_angle(float angle);
 
 	// Reading componenents
@@ -46,7 +46,8 @@ public:
 	float y() { return y_; }
 
 	// Reading geometric values
-	float norm() { return sqrt(pow(x_, 2) + pow(y_, 2)); }
+	float length() { return sqrt(pow(x_, 2) + pow(y_, 2)); }
+	float length_sq() { return pow(x_, 2) + pow(y_, 2); }
 	float angle() { return atan2(y_, x_); }
 
 #ifdef _DEBUG
