@@ -22,15 +22,24 @@ public:
 	Vector operator-(Vector vec);
 	void operator-=(Vector vec);
 
-
+	// Scalar multiplication
 	Vector operator*(int k);
 	Vector operator*(float k);
 
+	// Dot product
 	float operator*(Vector vec);
+
+	// Cross product (for lack of a 'x' operator)
 	float operator%(Vector vec);
 
 	// Projection of this vector on vector 'vec'
 	Vector proj(Vector vec);
+
+	// Shortcut for checking if vector is null (this == Vector(0, 0))
+	bool null() { return (x_ == 0 && y_ == 0); }
+
+	// Same as above. Note : using this function with any number other than 0 will return false
+	bool operator==(unsigned int zero);
 
 	// Setting components
 	void set_x(float x) { x_ = x; }

@@ -80,6 +80,9 @@ bool Game::loop()
 	if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		return false;
 
+	if (input_->isKey(Input::RELEASED, ALLEGRO_KEY_ESCAPE))
+		return false;
+
 	if (event.type == ALLEGRO_EVENT_TIMER) {
 		manager_->update();
 		input_->update();

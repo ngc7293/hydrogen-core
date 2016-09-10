@@ -65,24 +65,24 @@ float Vector::operator%(Vector vec)
 
 Vector Vector::proj(Vector vec)
 {
-	if (vec.norm() == 0)
+	if (vec.length() == 0)
 		return Vector(0, 0);
 
 	return Vector(vec.x(), vec.y()) * ((*this * vec) / (vec * vec));
 }
 
-void Vector::set_norm(float norm)
+void Vector::set_length(float length)
 {
 	float angle = Vector::angle();
-	x_ = norm * cos(angle);
-	y_ = norm * sin(angle);
+	x_ = length * cos(angle);
+	y_ = length * sin(angle);
 }
 
 void Vector::set_angle(float angle)
 {
-	float norm = Vector::norm();
-	x_ = norm * cos(angle);
-	y_ = norm * sin(angle);
+	float length = Vector::length();
+	x_ = length * cos(angle);
+	y_ = length * sin(angle);
 }
 
 #ifdef _DEBUG

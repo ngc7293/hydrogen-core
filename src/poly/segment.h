@@ -7,31 +7,41 @@ namespace hc {
 
 class Segment {
 private:
-	Vector origin_, direction_;
+	// Position of the origin of the segment.
+	Vector pos_;
+
+	// Direction vector of the segment. Is also used to set the 
+	// length such as the endpoint of the segment is [pos_ + dir_]
+	Vector dir_;
 
 public:
-	static float mindistance(Segment& a, Segment& b);
-	static float mindistance(Segment& a, Vector p);
-	static bool intersection(Segment& a, Segment& b);
+	static float mindistance(Segment a, Segment b);
+	static float mindistance(Segment a, Vector point);
+
+	static bool intersection(Segment a, Segment b);
+
+	// Return the point at which two segment intersect.
+	// If the segments don't intersect, returns the Vector(nan, nan)
+	static Vector intersection_point(Segment a, Segment b);
 
 public:
-	// Default constructor (0,0,0,0)
+	// Default constructor (0, 0, 0, 0)
 	Segment();
-	
+
 	// This might need to be changed into origin, endpoint, which is more often needed
-	Segment(Vector origin, Vector director);
-	Segment(float x, float y, Vector director);
+	Segment(Vector pos, Vector dir);
+	Segment(float x, float y, Vector dir);
 	Segment(float x, float y, float x2, float y2);
 	~Segment();
 
-	Vector& origin() { return origin_; }
-	Vector& direction() { return direction_; }
+	Vector& pos() { return pos_; }
+	Vector& dir() { return dir_; }
+	Vector end() { return pos_ + dir_; }
 
 #ifdef _DEBUG
 	void render();
 #endif
 };
-
 };
 
 #endif

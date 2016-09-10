@@ -9,27 +9,27 @@ namespace hc {
 
 class BoundingPoly {
 private:
-	Vector origin_;
-	std::vector<Segment> segments_;
+	Vector pos_;
+	std::vector<Vector> joints_;
 
 	float radius_;
 
 public:
 	static float mindistance(BoundingPoly& a, BoundingPoly& b);
 	static bool collision(BoundingPoly& a, BoundingPoly& b);
+	static std::vector<Vector> collision_points(BoundingPoly& a, BoundingPoly& b);
 
 public:	
 	BoundingPoly(float x, float y);
-	BoundingPoly(float x, float y, std::vector<Segment> segments);
 	~BoundingPoly();
 
-	void add(Segment segment);
+	void add_joint(Vector joint);
 
 	void move(float x, float y);
 	void rotate(float angle);
 
-	Vector& origin() { return origin_; }
-	std::vector<Segment>& segments() { return segments_; }
+	Vector& pos() { return pos_; }
+	std::vector<Vector>& joints() { return joints_; }
 
 	float radius() { return radius_; }
 
