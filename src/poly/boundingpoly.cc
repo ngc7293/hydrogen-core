@@ -6,6 +6,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "../hc/defaults.h"
 #include "segment.h"
 #include "trig.h"
 
@@ -105,6 +106,53 @@ void BoundingPoly::add_joint(Vector joint)
 void BoundingPoly::move(float x, float y)
 {
 	pos_ = Vector(x, y);
+}
+
+float BoundingPoly::move_predict(Vector motion, BoundingPoly& b)
+{
+	float maxfactor(1);
+
+	if (distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
+		return maxfactor;
+
+	for (unsigned int i(0); i < joints_.size() - 1; i++) {
+		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
+			Vector point = Segment::intersection_point(
+				Segment(pos_ + joints_[i], motion),
+				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
+			al_draw_filled_circle(point.x(), point.y(), 5, al_map_rgb(255, 0, 0));
+
+			if (std::isnan(point.x()))
+				continue;
+
+			point -= (pos_ + joints_[i]);
+
+			float factor = point.length() / motion.length();
+			maxfactor = (factor < maxfactor ? factor : maxfactor);
+		}
+	}
+
+	motion.set_angle(motion.angle() + PI);
+	for (unsigned int i(0); i < joints_.size() - 1; i++) {
+		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
+			Segment(b.pos() + b.joints()[j], motion).render();
+			Vector point = Segment::intersection_point(
+				Segment(b.pos() + b.joints()[j], motion),
+				Segment(pos_ + joints_[i], joints_[i + 1] - joints_[i]));
+			al_draw_filled_circle(point.x(), point.y(), 5, al_map_rgb(255, 0, 0));
+
+			if (std::isnan(point.x()))
+				continue;
+
+			point -= (b.pos() + b.joints()[j]);
+
+			float factor = point.length() / motion.length();
+			std::cout << factor << "\n";
+			maxfactor = (factor < maxfactor ? factor : maxfactor);
+		}
+	}
+
+	return maxfactor;
 }
 
 void BoundingPoly::rotate(float angle)

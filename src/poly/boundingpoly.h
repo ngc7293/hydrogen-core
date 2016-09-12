@@ -26,6 +26,7 @@ public:
 	void add_joint(Vector joint);
 
 	void move(float x, float y);
+	float move_predict(Vector motion, BoundingPoly& b);
 	void rotate(float angle);
 
 	Vector& pos() { return pos_; }

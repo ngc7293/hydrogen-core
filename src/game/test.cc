@@ -32,32 +32,39 @@ void Test::update()
 {
 	Test* first = static_cast<Test*>(hc::Game::game()->manager()->first(TEST));
 	if (first == this) {
+		float xto(0), yto(0);
 		hc::Input* input = hc::Game::game()->input();
 		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_W))
-			y_--;
+			yto--;
 		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_S))
-			y_++;
+			yto++;
 		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_A))
-			x_--;
+			xto--;
 		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_D))
-			x_++;
+			xto++;
 
-		poly_.move(x_, y_);
+		hc::Vector motion(xto, yto);
+		motion.set_length(4);
+
+		if (xto == 0 && yto == 0)
+			return;
 
 		if (input->isKey(hc::Input::DOWN, ALLEGRO_KEY_SPACE))
 			poly_.rotate(PI / 180);
-		if (input->isKey(hc::Input::PRESSED, ALLEGRO_KEY_ENTER))
-			poly_.add_joint(hc::Vector(rand() % 128 - 64, rand() % 128 - 64));
+
+		float factor(1);
+		std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
+		for (unsigned int i(1); i < tests.size(); i++) {
+			Test* t = static_cast<Test*>(tests[i]);
+			float cur = poly_.move_predict(motion, t->poly());
+			factor = (cur < factor ? cur : factor);
+		}
+		motion = motion * (factor - 0.01f);
+		x_ += motion.x();
+		y_ += motion.y(); 
+		poly_.move(x_, y_);
 	}
 
-	std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
-	for (unsigned int i(0); i < tests.size(); i++) {
-		Test* t = static_cast<Test*>(tests[i]);
-		if (t != this)
-			hc::BoundingPoly::collision_points(poly_, t->poly());
-		if (first == this && t != this)
-			hc::BoundingPoly::mindistance(poly_, t->poly());
-	}
 }
 
 void Test::render()
