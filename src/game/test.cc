@@ -3,7 +3,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "boundingpoly.h"
+#include "polygon.h"
 #include "game.h"
 #include "input.h"
 #include "manager.h"
@@ -19,9 +19,9 @@ Test::Test(float x, float y)
 	hc::Vector p2(16 + (rand() % 48), -32);
 	hc::Vector p3((rand() % 48) - 24, (rand() % 48) + 16);
 
-	poly_.add_joint(p1);
-	poly_.add_joint(p2);
-	poly_.add_joint(p3);
+	poly_.add(p1);
+	poly_.add(p2);
+	poly_.add(p3);
 }
 
 Test::~Test()
@@ -55,8 +55,7 @@ void Test::update()
 		float factor(1);
 		std::vector<Object*> tests = hc::Game::game()->manager()->all(TEST);
 		for (unsigned int i(1); i < tests.size(); i++) {
-			Test* t = static_cast<Test*>(tests[i]);
-			float cur = poly_.move_predict(motion, t->poly());
+			float cur = poly_.move_until(motion, static_cast<Test*>(tests[i])->poly());
 			factor = (cur < factor ? cur : factor);
 		}
 		motion = motion * (factor - 0.01f);

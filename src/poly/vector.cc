@@ -32,6 +32,11 @@ void Vector::operator+=(Vector vec)
 	y_ += vec.y();
 }
 
+Vector Vector::operator-()
+{
+	return Vector(-x_, -y_);
+}
+
 Vector Vector::operator-(Vector vec)
 {
 	return Vector(x_ - vec.x(), y_ - vec.y());

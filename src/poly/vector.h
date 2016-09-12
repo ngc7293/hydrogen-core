@@ -19,6 +19,7 @@ public:
 	Vector operator+(Vector vec);
 	void operator+=(Vector vec);
 
+	Vector operator-();
 	Vector operator-(Vector vec);
 	void operator-=(Vector vec);
 
