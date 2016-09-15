@@ -167,14 +167,20 @@ float Polygon::move_until(Vector motion, Polygon& b)
 
 	// Go through all joints combinations, skipping joints in the opposite direction of the possible collision
 	float angle = atan2(b.pos().y() - pos_.y(), b.pos().x() - pos_.x());
+	float angle2 = angle + M_PI;
+	if (angle2 > 2*M_PI)
+		angle2 -= 2*M_PI;
+	if (angle2 < 0)
+		angle += 2*M_PI;
+
+	al_draw_line(pos_.x(), pos_.y(), pos_.x() + 32 * cos(angle), pos_.y() + 32 * sin(angle), al_map_rgb(255,255,255), 2);
+	al_draw_line(b.pos().x(), b.pos().y(), b.pos().x() + 32 * cos(angle2), b.pos().y() + 32 * sin(angle2), al_map_rgb(255,255,255), 2);
+
 	for (unsigned int i(0); i < joints_.size() - 1; i++) {
-		if (abs(joints_[i].angle() - angle) > M_PI/2)
+		if (abs(joints_[i].angle() - angle) > M_PI / 2) 
 			continue;
 
-		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
-			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI)
-				continue;
-			
+		for (unsigned int j(0); j < b.joints().size() - 1; j++) {			
 			float factor;
 			Vector point = Segment::intersection_point(Segment(pos_ + joints_[i], motion),
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));

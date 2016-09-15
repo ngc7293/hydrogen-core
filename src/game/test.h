@@ -7,18 +7,20 @@
 
 class Test : public hc::Object {
 private:
-	float size_;
 	float x_, y_;
 	hc::Polygon poly_;
 
 public:
-	Test(float x, float y, bool first = false);
+	Test(float x, float y);
 	virtual ~Test();
 
 	virtual void update();
 	virtual void render();
 
 	hc::Polygon& poly() { return poly_; }
+
+private:
+	void move();
 };
 
 #endif
