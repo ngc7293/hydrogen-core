@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include <cmath>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
@@ -34,11 +36,16 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 		}
 	}
 
+	float angle = atan2(b.pos().y() - a.pos().y(), b.pos().x() - a.pos().x());
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
+		if (abs(angle - a.joints()[i].angle()) > M_PI/2)
+			continue;
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
+			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI/2)
+				continue;
 			if (Segment::intersection(
-				Segment(a.pos() + a.joints()[i], a.joints()[i + 1] - a.joints()[i]),
-				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j])))
+					Segment(a.pos() + a.joints()[i], a.joints()[i + 1] - a.joints()[i]),
+					Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j])))
 				return true;
 		}
 	}
@@ -51,9 +58,6 @@ std::vector<Vector> Polygon::collision_points(Polygon& a, Polygon& b)
 	if (distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return points;
 
-	// FIXME: It would be best to avoid actually changing the values is possible.
-	// This might require making Segment::intersection not use references
-	// Would this affect performance? Should that also be avoided?
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
 			Vector point = Segment::intersection_point(
@@ -155,8 +159,15 @@ float Polygon::move_until(Vector motion, Polygon& b)
 	if (distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
 		return maxfactor;
 
+	float angle = atan2(b.pos().y() - pos_.y(), b.pos().x() - pos_.x());
 	for (unsigned int i(0); i < joints_.size() - 1; i++) {
+		if (abs(joints_[i].angle() - angle) > M_PI/2)
+			continue;
+
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
+			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI)
+				continue;
+
 			Vector point = Segment::intersection_point(
 				Segment(pos_ + joints_[i], motion),
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
@@ -182,7 +193,6 @@ float Polygon::move_until(Vector motion, Polygon& b)
 
 	return maxfactor;
 }
-
 
 #ifdef _DEBUG
 void Polygon::render()
