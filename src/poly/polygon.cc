@@ -19,16 +19,18 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	if (distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return false;
 
+	// If both are circles, then the previous check means there is a collision
 	if (a.is_circle() && b.is_circle())
 		return true;
 
+	// Check for minimum distance. If the minimum distance is smaller than the radius of the circle, there is a collision.
+	//FIXME: Circle logic should maybe be in it's own function as to not clutter this one.
 	if (a.is_circle()) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
 			if (Segment::mindistance(Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]), a.pos()) < a.radius())
 				return true;
 		}
 	}
-
 	if (b.is_circle()) {
 		for (unsigned int j(0); j < a.joints().size() - 1; j++) {
 			if (Segment::mindistance(Segment(a.pos() + a.joints()[j], a.joints()[j + 1] - a.joints()[j]), b.pos()) < b.radius())
@@ -36,6 +38,8 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 		}
 	}
 
+	// Test all joints combination, aborting as soon as a collision is found.
+	// Ignores joints pointing away from to possible collision.
 	float angle = atan2(b.pos().y() - a.pos().y(), b.pos().x() - a.pos().x());
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
 		if (abs(angle - a.joints()[i].angle()) > M_PI/2)
@@ -108,7 +112,7 @@ void Polygon::add(Vector joint)
 	if (joints_.size() > 1)
 		joints_.pop_back();
 
-	joints_.push_back(joint);
+	joints_.insert(joint);
 
 	if (joints_.size() > 1)
 		joints_.push_back(joints_.front());
@@ -151,7 +155,7 @@ float Polygon::distance(Polygon& b)
 {
 	return distance(*this, b);
 }
-
+//TODO: Document me
 float Polygon::move_until(Vector motion, Polygon& b)
 {
 	float maxfactor(1);
@@ -159,6 +163,7 @@ float Polygon::move_until(Vector motion, Polygon& b)
 	if (distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
 		return maxfactor;
 
+	// Go through all joints combinations, skipping joints in the opposite direction of the possible collision
 	float angle = atan2(b.pos().y() - pos_.y(), b.pos().x() - pos_.x());
 	for (unsigned int i(0); i < joints_.size() - 1; i++) {
 		if (abs(joints_[i].angle() - angle) > M_PI/2)
@@ -167,16 +172,13 @@ float Polygon::move_until(Vector motion, Polygon& b)
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
 			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI)
 				continue;
-
-			Vector point = Segment::intersection_point(
-				Segment(pos_ + joints_[i], motion),
+			
+			float factor;
+			Vector point = Segment::intersection_point(Segment(pos_ + joints_[i], motion),
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
-
-			Vector point2 = Segment::intersection_point(
-				Segment(b.pos() + b.joints()[j], -motion),
+			Vector point2 = Segment::intersection_point(Segment(b.pos() + b.joints()[j], -motion),
 				Segment(pos_ + joints_[i], joints_[i + 1] - joints_[i]));
 
-			float factor;
 
 			if (!std::isnan(point.x())) {
 				point -= (pos_ + joints_[i]);
@@ -191,7 +193,7 @@ float Polygon::move_until(Vector motion, Polygon& b)
 		}
 	}
 
-	return maxfactor;
+	return maxfactor - 0.001f;
 }
 
 #ifdef _DEBUG
@@ -199,8 +201,10 @@ void Polygon::render()
 {
 	if (is_circle())
 		al_draw_circle(pos_.x(), pos_.y(), radius_, al_map_rgb(255, 0, 255), 0);
+
 	for (unsigned int i(0); i < joints_.size() - 1; i++)
 		Segment(pos_ + joints_[i], (joints_[i + 1] - joints_[i])).render();
+
 	al_draw_filled_circle(pos_.x(), pos_.y(), radius_, al_premul_rgba(0, 0, 255, 32));
 	al_draw_filled_circle(pos_.x(), pos_.y(), 3, al_map_rgb(255, 255, 255));
 }
