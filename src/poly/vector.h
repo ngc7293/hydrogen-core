@@ -24,8 +24,10 @@ public:
 	void operator-=(Vector vec);
 
 	// Scalar multiplication
-	Vector operator*(int k);
+	//Vector operator*(int k);
+	//void operator*=(int k);
 	Vector operator*(float k);
+	void operator*=(float k);
 
 	// Dot product
 	float operator*(Vector vec);
