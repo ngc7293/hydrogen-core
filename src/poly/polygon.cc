@@ -16,7 +16,7 @@ namespace hc {
 bool Polygon::collision(Polygon& a, Polygon& b)
 {
 	// Compare squared values, because sqrt() is very expensive
-	if (distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
+	if (trig::distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return false;
 
 	// If both are circles, then the previous check means there is a collision
@@ -27,13 +27,13 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	//FIXME: Circle logic should maybe be in it's own function as to not clutter this one.
 	if (a.is_circle()) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
-			if (Segment::mindistance(Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]), a.pos()) < a.radius())
+			if (Segment::distance(Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]), a.pos()) < a.radius())
 				return true;
 		}
 	}
 	if (b.is_circle()) {
 		for (unsigned int j(0); j < a.joints().size() - 1; j++) {
-			if (Segment::mindistance(Segment(a.pos() + a.joints()[j], a.joints()[j + 1] - a.joints()[j]), b.pos()) < b.radius())
+			if (Segment::distance(Segment(a.pos() + a.joints()[j], a.joints()[j + 1] - a.joints()[j]), b.pos()) < b.radius())
 				return true;
 		}
 	}
@@ -59,7 +59,7 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 std::vector<Vector> Polygon::collision_points(Polygon& a, Polygon& b)
 {
 	std::vector<Vector> points;
-	if (distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
+	if (trig::distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return points;
 
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
@@ -106,7 +106,7 @@ float Polygon::distance(Polygon& a, Polygon& b)
 			break;
 	}
 
-	return Segment::mindistance(from_a, from_b);
+	return Segment::distance(from_a, from_b);
 }
 
 void Polygon::add(Vector joint)
@@ -162,7 +162,7 @@ float Polygon::move_until(Vector motion, Polygon& b)
 {
 	float maxfactor(1);
 
-	if (distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
+	if (trig::distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
 		return maxfactor;
 
 	// Go through all joints combinations, skipping joints in the opposite direction of the possible collision

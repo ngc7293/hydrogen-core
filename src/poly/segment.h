@@ -15,8 +15,8 @@ private:
 	Vector dir_;
 
 public:
-	static float mindistance(Segment a, Segment b);
-	static float mindistance(Segment a, Vector point);
+	static float distance(Segment a, Segment b);
+	static float distance(Segment a, Vector point);
 
 	static bool intersection(Segment a, Segment b);
 

@@ -37,30 +37,30 @@ Segment::Segment(float x, float y, float x2, float y2)
 
 Segment::~Segment() {}
 
-float Segment::mindistance(Segment a, Segment b)
+float Segment::distance(Segment a, Segment b)
 {
 	float cur, min;
 
 	// Try all combinations
-	min = mindistance(a, b.pos());
+	min = distance(a, b.pos());
 
-	cur = mindistance(a, b.end());
+	cur = distance(a, b.end());
 	min = (min > cur ? cur : min);
 
-	cur = mindistance(b, a.pos());
+	cur = distance(b, a.pos());
 	min = (min > cur ? cur : min);
 
-	cur = mindistance(b, a.end());
+	cur = distance(b, a.end());
 	min = (min > cur ? cur : min);
 
 	return min;
 }
 
-float Segment::mindistance(Segment a, Vector p)
+float Segment::distance(Segment a, Vector p)
 {
 	// If segment 'a' is a point (length 0), return the distance(a, p)
 	if (a.dir() == Vector(0, 0))
-		return distance(a.pos(), p);
+		return trig::distance(a.pos(), p);
 
 	// Find the closest point on line 'a' with the form [ao + t * ad]
 	float t = ((p - a.pos()) * a.dir()) / (a.dir() * a.dir());
@@ -69,7 +69,7 @@ float Segment::mindistance(Segment a, Vector p)
 	t = (t < 0 ? 0 : (t > 1 ? 1 : t));
 
 	// Find the distance(ao + t * ad, t)
-	float dis = distance(a.pos() + a.dir() * t, p);
+	float dis = trig::distance(a.pos() + a.dir() * t, p);
 
 #ifdef _DEBUG
 	// For visualisation purpose, draw the shortest line between the segment and the point.

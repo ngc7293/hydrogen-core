@@ -4,6 +4,8 @@
 
 #include "vector.h"
 
+namespace trig {
+
 float distance(hc::Vector pos, hc::Vector pos2)
 {
 	return sqrt(distance_sq(pos, pos2));
@@ -23,3 +25,5 @@ float distance_sq(float x, float y, float x2, float y2)
 {
 	return pow(x - x2, 2) + pow(y - y2, 2);
 }
+
+} //namespace trig
