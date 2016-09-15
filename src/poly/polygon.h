@@ -46,6 +46,7 @@ public:
 	float move_until(Vector motion, Polygon& b);
 
 	// Member access
+	bool is_circle() { return (joints_.size() == 1); }
 	Vector& pos() { return pos_; }
 	float radius() { return radius_; }
 	std::vector<Vector>& joints() { return joints_; }

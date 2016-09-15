@@ -17,6 +17,23 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	if (distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return false;
 
+	if (a.is_circle() && b.is_circle())
+		return true;
+
+	if (a.is_circle()) {
+		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
+			if (Segment::mindistance(Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]), a.pos()) < a.radius())
+				return true;
+		}
+	}
+
+	if (b.is_circle()) {
+		for (unsigned int j(0); j < a.joints().size() - 1; j++) {
+			if (Segment::mindistance(Segment(a.pos() + a.joints()[j], a.joints()[j + 1] - a.joints()[j]), b.pos()) < b.radius())
+				return true;
+		}
+	}
+
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
 			if (Segment::intersection(
@@ -84,11 +101,13 @@ float Polygon::distance(Polygon& a, Polygon& b)
 
 void Polygon::add(Vector joint)
 {
-	if (joints_.size() > 0)
+	if (joints_.size() > 1)
 		joints_.pop_back();
 
 	joints_.push_back(joint);
-	joints_.push_back(joints_.front());
+
+	if (joints_.size() > 1)
+		joints_.push_back(joints_.front());
 
 	// Take the longest radius
 	radius_ = (pow(radius_, 2) > joint.length_sq() ? radius_ : joint.length());
@@ -104,6 +123,14 @@ void Polygon::rotate(float angle)
 	for (unsigned int i(0); i < joints_.size(); i++) {
 		joints_[i].set_angle(joints_[i].angle() + angle);
 	}
+}
+
+void Polygon::scale(float factor)
+{
+	for (unsigned int i(0); i < joints_.size(); i++) {
+		joints_[i] *= factor;
+	}
+	radius_ *= factor;
 }
 
 bool Polygon::collision(Polygon& b)
@@ -160,6 +187,8 @@ float Polygon::move_until(Vector motion, Polygon& b)
 #ifdef _DEBUG
 void Polygon::render()
 {
+	if (is_circle())
+		al_draw_circle(pos_.x(), pos_.y(), radius_, al_map_rgb(255, 0, 255), 0);
 	for (unsigned int i(0); i < joints_.size() - 1; i++)
 		Segment(pos_ + joints_[i], (joints_[i + 1] - joints_[i])).render();
 	al_draw_filled_circle(pos_.x(), pos_.y(), radius_, al_premul_rgba(0, 0, 255, 32));
