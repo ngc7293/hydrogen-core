@@ -114,7 +114,7 @@ void Polygon::add(Vector joint)
 	if (joints_.size() > 1)
 		joints_.pop_back();
 
-	joints_.insert(joint);
+	joints_.push_back(joint);
 
 	if (joints_.size() > 1)
 		joints_.push_back(joints_.front());
