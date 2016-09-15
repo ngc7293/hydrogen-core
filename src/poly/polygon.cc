@@ -69,7 +69,9 @@ std::vector<Vector> Polygon::collision_points(Polygon& a, Polygon& b)
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
 
 			if (!std::isnan(point.x())) {
+#ifdef _DEBUG
 				al_draw_filled_circle(point.x(), point.y(), 3, al_map_rgb(255, 255, 0));
+#endif
 				points.push_back(point);
 			}
 		}
