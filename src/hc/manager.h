@@ -15,7 +15,8 @@ public:
 	Manager();
 	~Manager();
 
-	// Add an object to the list
+	// Add an object to the list, keeping the list ordered
+	// by object.type() (ascending order)
 	void add(Object* object);
 
 	// Remove an object from the list
