@@ -19,8 +19,11 @@ Manager::~Manager()
 
 void Manager::add(Object* object)
 {
-	if (find(object) == -1)
-		objects_.push_back(object);
+	if (find(object) == -1) {
+		unsigned int i(0);
+		for (; i < objects_.size() && objects_[i]->type() < object->type(); i++)
+		objects_.insert(objects_.begin() + i, object);
+	}
 }
 
 void Manager::remove(Object* object)
