@@ -35,14 +35,14 @@ public:
 	void split(int framecount);
 
 	// Draw current frame
-	void draw(Vector<float> pos);
-	void draw(Vector<float> pos, float angle);
-	void draw(Vector<float> pos, float angle, float xscale, float yscale);
+	void draw(vecf pos);
+	void draw(vecf pos, float angle);
+	void draw(vecf pos, float angle, float xscale, float yscale);
 
 	// Draw specific frame
-	void drawFrame(Vector<float> pos, int frame);
-	void drawFrame(Vector<float> pos, int frame, float angle);
-	void drawFrame(Vector<float> pos, int frame, float angle, float xscale, float yscale);
+	void drawFrame(vecf pos, int frame);
+	void drawFrame(vecf pos, int frame, float angle);
+	void drawFrame(vecf pos, int frame, float angle, float xscale, float yscale);
 
 	// Access to members
 	// Return current frame

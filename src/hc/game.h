@@ -1,13 +1,14 @@
+#ifndef GAME_H_
+#define GAME_H_
+
 #include <allegro5/allegro.h>
 
-#include "defaults.h"
+#include "defs.h"
 
 #include "input.h"
 #include "manager.h"
 #include "media.h"
-
-#ifndef GAME_H_
-#define GAME_H_
+#include "view.h"
 
 namespace hc {
 
@@ -36,6 +37,7 @@ private:
 	Input* input_;
 	Manager* manager_;
 	Media* media_;
+	View* view_;
 
 private:
 	Game();
@@ -44,8 +46,8 @@ public:
 	// Singleton access to the game
 	static Game& game()
 	{
-		static Game* game_ = new Game();
-		return *game_;
+		static Game game_ = Game();
+		return game_;
 	}
 	~Game();
 
@@ -60,6 +62,9 @@ public:
 
 	// Return the media IO module
 	Media& media() { return *media_; }
+
+	// Return the viewport
+	View& view() { return *view_; }
 
 	// Return the main display
 	ALLEGRO_DISPLAY* display() { return display_; }

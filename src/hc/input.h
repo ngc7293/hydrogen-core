@@ -1,9 +1,11 @@
-#include <allegro5/allegro.h>
-
-#include "defaults.h"
-
 #ifndef INPUT_H_
 #define INPUT_H_
+
+#include <allegro5/allegro.h>
+
+#include "defs.h"
+
+#include "vector.h"
 
 namespace hc {
 
@@ -27,7 +29,8 @@ private:
 	State mousebutton_[MOUSE_BUTTON_MAX];
 
 	// The mouses axis
-	float mx_, my_, mz_;
+	vecf mxy_;
+	float mz_;
 
 public:
 	Input();
@@ -46,14 +49,18 @@ public:
 	// Return true if 'button' is of state 'stat
 	bool isMouseButton(State state, int button);
 
+	// Return mouse position
+	vecf mxy() { return mxy_; }
+
 	// Return the mouse x (relative to the display)
-	float mx() { return mx_; }
+	float mx() { return mxy_.x(); }
 
 	// Return the mouse y (relative to the display)
-	float my() { return my_; }
+	float my() { return mxy_.y(); }
 
 	// Return the mouse z (relative to the display)
 	float mz() { return mz_; }
+	void set_mz(float mz);
 };
 
 } //namespace hc

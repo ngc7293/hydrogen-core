@@ -1,9 +1,9 @@
+#ifndef MANAGER_H_
+#define MANAGER_H_
+
 #include <vector>
 
 #include "object.h"
-
-#ifndef MANAGER_H_
-#define MANAGER_H_
 
 namespace hc {
 
@@ -32,11 +32,11 @@ public:
 
 	// Return the first object to match the filter
 	template <typename O>
-	O* first(Object::Type filter);
+	O* first();
 
 	// Return all object matching the filter
 	template <typename O>
-	std::vector<O*> all(Object::Type filter);
+	std::vector<O*> all();
 
 	// Tell the objects to update and remove those flagged for deletion
 	void update();
@@ -58,21 +58,21 @@ O* Manager::at(unsigned int i)
 }
 
 template <typename O>
-O* Manager::first(Object::Type filter)
+O* Manager::first()
 {
 	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
+		if (objects_[i]->type() == O::TYPE_ID)
 			return static_cast<O*>(objects_[i]);
 	return nullptr;
 }
 
 template <typename O>
-std::vector<O*> Manager::all(Object::Type filter)
+std::vector<O*> Manager::all()
 {
 	std::vector<O*> found;
 
 	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
+		if (objects_[i]->type() == O::TYPE_ID)
 			found.push_back(static_cast<O*>(objects_[i]));
 	return found;
 }

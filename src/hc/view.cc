@@ -9,7 +9,7 @@
 
 namespace hc {
 
-Vector<float> View::onDisplay(Vector<float> pos)
+vecf View::onDisplay(vecf pos)
 {
 	hc::View& view = hc::Game::game().view();
 	return (pos - view.pos()) * view.scale();
@@ -17,11 +17,14 @@ Vector<float> View::onDisplay(Vector<float> pos)
 
 View::View()
 {
-	pos_ = Vector<float>(-DEFAULT_SCREEN_HEIGHT * 0.5, -DEFAULT_SCREEN_HEIGHT * 0.5);
+	pos_ = vecf(-DEFAULT_SCREEN_HEIGHT * 0.5, -DEFAULT_SCREEN_HEIGHT * 0.5);
 	scale_ = 1;
 
-	minpos_ = Vector<float>(pos_.x(), pos_.y());
-	maxpos_ = Vector<float>(pos_.x(), pos_.y());
+	minpos_ = vecf(pos_.x(), pos_.y());
+	maxpos_ = vecf(pos_.x(), pos_.y());
+
+	movement_ = false;
+	scaling_ = false;
 }
 
 View::~View()
@@ -30,8 +33,11 @@ View::~View()
 
 void View::update()
 {
-	move();
-	zoom();
+	if (movement_)
+		move();
+
+	if (scaling_)
+		zoom();
 }
 
 void View::move()
@@ -50,7 +56,7 @@ void View::move()
 		xto++;
 
 	//FIXME: Diagonal moving is faster by a factor of (sqrt(2))
-	pos_ += Vector<float>(xto, yto) * (VIEW_SPEED / scale_);
+	pos_ += vecf(xto, yto) * (VIEW_SPEED / scale_);
 
 	// Limit view to minpos and maxpos
 	if (pos_.x()< minpos_.x() - (DEFAULT_SCREEN_WIDTH / scale_ * 0.5))
@@ -79,7 +85,7 @@ void View::zoom()
 	scale_ = pow(VIEW_EXP_BASE, exponent_);
 
 	if (previous != scale_)
-		pos_ -= Vector<float>(
+		pos_ -= vecf(
 			(DEFAULT_SCREEN_WIDTH / scale_ - DEFAULT_SCREEN_WIDTH / previous) * 0.5,
 			(DEFAULT_SCREEN_HEIGHT / scale_ - DEFAULT_SCREEN_HEIGHT / previous) * 0.5);
 }

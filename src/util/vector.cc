@@ -3,7 +3,7 @@
 #include <cmath>
 
 template <typename T>
-bool Vector<T>::USE_APPROXIMATE_EQUALITY = false;
+bool Vector<T>::USE_PERMISSIVE_EQUALITY = false;
 
 template <typename T>
 Vector<T>::Vector(T x, T y)
@@ -90,10 +90,10 @@ T Vector<T>::operator%(const Vector<T>& vec) const
 template <typename T>
 bool Vector<T>::operator==(const Vector<T>& vec) const
 {
-	if (!ALLOW_INEXACT_EGALITY)
+	if (!USE_PERMISSIVE_EQUALITY)
 		return (x_ == vec.x() && y_ == vec.y());
 	else
-		return (*this - vec).length_sq() < 0.000001;
+		return ((*this - vec).length_sq() < 0.000001);
 }
 
 template <typename T>

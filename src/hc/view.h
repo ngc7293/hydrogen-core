@@ -17,16 +17,22 @@ public:
 	
 private:
 	// Position of top left corner
-	Vector<float> pos_;
-	Vector<float> minpos_;
-	Vector<float> maxpos_;
+	vecf pos_;
+	vecf minpos_;
+	vecf maxpos_;
 
 	// The ratio of units per pixel
 	float scale_;
 	float exponent_;
 
+	// Enables or disables WSAD viewport movement. False by default.
+	bool movement_;
+
+	// Enables or disables scroll-wheel scaling. False by default.
+	bool scaling_;
+
 public:
-	static Vector<float> onDisplay(Vector<float> pos);
+	static vecf onDisplay(vecf pos);
 
 public:
 	View();
@@ -37,11 +43,19 @@ public:
 	void zoom();
 
 	// Access to members
-	Vector<float>& pos() { return pos_; }
-	Vector<float>& minpos() { return minpos_; }
-	Vector<float>& maxpos() { return maxpos_; }
+	vecf& pos() { return pos_; }
+	vecf& minpos() { return minpos_; }
+	vecf& maxpos() { return maxpos_; }
 
 	float scale() const { return scale_; }
+
+	// Return if WASD movement is enabled
+	bool movement() { return movement_; }
+	void set_movement(bool movement) { movement_ = movement; }
+
+	// Return if scroll wheel scaling/zooming is enabled
+	bool scaling() { return scaling_; }
+	void set_scaling(bool scaling) { scaling_ = scaling; }
 };
 
 } // namespace hc

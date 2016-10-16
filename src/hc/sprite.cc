@@ -45,17 +45,17 @@ void Sprite::split(int framecount)
 	framewidth_ = width_ / framecount_;
 }
 
-void Sprite::draw(Vector<float> pos)
+void Sprite::draw(vecf pos)
 {
 	draw(pos, 0, 1, 1);
 }
 
-void Sprite::draw(Vector<float> pos, float angle)
+void Sprite::draw(vecf pos, float angle)
 {
 	draw(pos, angle, 1, 1);
 }
 
-void Sprite::draw(Vector<float> pos, float angle, float xscale, float yscale)
+void Sprite::draw(vecf pos, float angle, float xscale, float yscale)
 {
 	drawFrame(pos, frame_, angle, xscale, yscale);
 
@@ -73,17 +73,17 @@ void Sprite::draw(Vector<float> pos, float angle, float xscale, float yscale)
 	}
 }
 
-void Sprite::drawFrame(Vector<float> pos, int frame)
+void Sprite::drawFrame(vecf pos, int frame)
 {
 	drawFrame(pos, frame, 0, 1, 1);
 }
 
-void Sprite::drawFrame(Vector<float> pos, int frame, float angle)
+void Sprite::drawFrame(vecf pos, int frame, float angle)
 {
 	drawFrame(pos, frame, angle, 1, 1);
 }
 
-void Sprite::drawFrame(Vector<float> pos, int frame, float angle, float xscale, float yscale)
+void Sprite::drawFrame(vecf pos, int frame, float angle, float xscale, float yscale)
 {
 	hc::View& view = hc::Game::game().view();
 	pos = hc::View::onDisplay(pos);

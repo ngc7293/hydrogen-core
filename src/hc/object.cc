@@ -2,7 +2,7 @@
 
 namespace hc {
 
-Object::Object(Type type)
+Object::Object(int type)
     : type_(type)
 {
 	destroy_ = false;
