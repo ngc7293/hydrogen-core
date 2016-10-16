@@ -26,4 +26,4 @@ obj/game/%.o: src/game/%.cc
 	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I src/hc/
 
 clean:
-	@rm -rf obj/hc/* obj/game/* hc.o
+	@rm -rf obj/* hc.o

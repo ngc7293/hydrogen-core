@@ -47,24 +47,6 @@ int Manager::find(Object* object)
 	return -1;
 }
 
-Object* Manager::first(Object::Type filter)
-{
-	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
-			return objects_[i];
-	return nullptr;
-}
-
-std::vector<Object*> Manager::all(Object::Type filter)
-{
-	std::vector<Object*> found;
-
-	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
-			found.push_back(objects_[i]);
-	return found;
-}
-
 void Manager::update()
 {
 	for (unsigned int i(0); i < objects_.size(); i++)
