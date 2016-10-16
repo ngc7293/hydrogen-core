@@ -42,10 +42,10 @@ private:
 
 public:
 	// Singleton access to the game
-	static Game* game()
+	static Game& game()
 	{
 		static Game* game_ = new Game();
-		return game_;
+		return *game_;
 	}
 	~Game();
 
@@ -53,13 +53,13 @@ public:
 	bool loop();
 
 	// Return the input module
-	Input* input() { return input_; }
+	Input& input() { return *input_; }
 
 	// Return the object managing module
-	Manager* manager() { return manager_; }
+	Manager& manager() { return *manager_; }
 
 	// Return the media IO module
-	Media* media() { return media_; }
+	Media& media() { return *media_; }
 
 	// Return the main display
 	ALLEGRO_DISPLAY* display() { return display_; }
