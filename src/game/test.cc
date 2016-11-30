@@ -34,7 +34,7 @@ Test::~Test()
 
 void Test::update()
 {
-	Test* first = static_cast<Test*>(hc::Game::game().manager().first(TEST));
+	Test* first = hc::Game::game().manager().first<Test>(TEST);
 	if (first == this) {
 		hc::Input& input = hc::Game::game().input();
 		if (input.isKey(hc::Input::DOWN, ALLEGRO_KEY_SPACE))
@@ -69,11 +69,11 @@ void Test::move()
 		return;
 
 	float factor(1);
-	std::vector<Object*> tests = hc::Game::game().manager().all(TEST);
+	std::vector<Test*> tests = hc::Game::game().manager().all<Test>(TEST);
 	for (unsigned int i(1); i < tests.size(); i++) {
-		if (poly_.collision(static_cast<Test*>(tests[i])->poly()))
+		if (poly_.collision(tests[i]->poly()))
 			std::cout << "collision" << std::endl;
-		float cur = poly_.move_until(motion, static_cast<Test*>(tests[i])->poly());
+		float cur = poly_.move_until(motion, tests[i]->poly());
 		factor = (cur < factor ? cur : factor);
 	}
 	motion = motion * (factor - 0.01f);
