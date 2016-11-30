@@ -6,12 +6,12 @@
 
 namespace trig {
 
-float distance(hc::Vector pos, hc::Vector pos2)
+float distance(hc::vec2 pos, hc::vec2 pos2)
 {
 	return sqrt(distance_sq(pos, pos2));
 }
 
-float distance_sq(hc::Vector pos, hc::Vector pos2)
+float distance_sq(hc::vec2 pos, hc::vec2 pos2)
 {
 	return distance_sq(pos.x(), pos.y(), pos2.x(), pos2.y());
 }

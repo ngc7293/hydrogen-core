@@ -5,40 +5,40 @@
 
 namespace hc {
 
-class Vector {
+class vec2 {
 private:
 	float x_, y_;
 
 public:
-	Vector(float x, float y);
-	~Vector();
+	vec2(float x, float y);
+	~vec2();
 
 	// Algebric operations
-	bool operator==(Vector vec);
+	bool operator==(vec2 vec);
 
-	Vector operator+(Vector vec);
-	void operator+=(Vector vec);
+	vec2 operator+(vec2 vec);
+	void operator+=(vec2 vec);
 
-	Vector operator-();
-	Vector operator-(Vector vec);
-	void operator-=(Vector vec);
+	vec2 operator-();
+	vec2 operator-(vec2 vec);
+	void operator-=(vec2 vec);
 
 	// Scalar multiplication
-	//Vector operator*(int k);
+	//vec2 operator*(int k);
 	//void operator*=(int k);
-	Vector operator*(float k);
+	vec2 operator*(float k);
 	void operator*=(float k);
 
 	// Dot product
-	float operator*(Vector vec);
+	float operator*(vec2 vec);
 
 	// Cross product (for lack of a 'x' operator)
-	float operator%(Vector vec);
+	float operator%(vec2 vec);
 
 	// Projection of this vector on vector 'vec'
-	Vector proj(Vector vec);
+	vec2 proj(vec2 vec);
 
-	// Shortcut for checking if vector is null (this == Vector(0, 0))
+	// Shortcut for checking if vector is null (this == vec2(0, 0))
 	bool null() { return (x_ == 0 && y_ == 0); }
 
 	// Same as above. Note : using this function with any number other than 0 will return false

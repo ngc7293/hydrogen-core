@@ -17,10 +17,10 @@ Test::Test(float x, float y)
 	, y_(y)
 	, poly_(x, y)
 {
-	hc::Vector p1(-32, -32);
-	hc::Vector p2(+32, -32);
-	hc::Vector p3(+32, +32);
-	hc::Vector p4(-32, +32);
+	hc::vec2 p1(-32, -32);
+	hc::vec2 p2(+32, -32);
+	hc::vec2 p3(+32, +32);
+	hc::vec2 p4(-32, +32);
 
 	poly_.add(p1);
 	poly_.add(p2);
@@ -62,7 +62,7 @@ void Test::move()
 	if (input.isKey(hc::Input::DOWN, ALLEGRO_KEY_D))
 		xto++;
 
-	hc::Vector motion(xto, yto);
+	hc::vec2 motion(xto, yto);
 	motion.set_length(4);
 
 	if (xto == 0 && yto == 0)
