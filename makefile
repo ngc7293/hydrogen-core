@@ -5,16 +5,21 @@ ALLEG =`pkg-config --cflags --libs allegro-5 allegro_primitives-5 allegro_image-
 
 CORESRCS = $(wildcard src/hc/*.cc)
 COREOBJS = $(patsubst src/hc/%.cc,obj/hc/%.o,$(CORESRCS))
+COREDEPS = $(patsubst src/hc/%.cc,obj/hc/%.d,$(CORESRCS))
 
 GAMESRCS = $(wildcard src/game/*.cc)
 GAMEOBJS = $(patsubst src/game/%.cc,obj/game/%.o,$(GAMESRCS))
+GAMEDEPS = $(patsubst src/game/%.cc,obj/game/%.d,$(GAMESRCS))
 
 POLYSRCS = $(wildcard src/poly/*.cc)
 POLYOBJS = $(patsubst src/poly/%.cc,obj/poly/%.o,$(POLYSRCS))
+POLYDEPS = $(patsubst src/poly/%.cc,obj/poly/%.d,$(POLYSRCS))
 
-all: hc.o
+EXE = hc.o
 
-hc.o: $(COREOBJS) $(GAMEOBJS) $(POLYOBJS)
+all: $(EXE)
+
+$(EXE): $(COREOBJS) $(GAMEOBJS) $(POLYOBJS)
 	@echo $@
 	@$(CXX) -o $@ $^ $(ALLEG)
 
@@ -34,4 +39,6 @@ obj/poly/%.o: src/poly/%.cc
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	@rm -rf obj/* hc
+	@rm -rf obj/* $(EXE)
+
+-include $(COREDEPS) $(GAMEDEPS) $(POLYDEPS)
