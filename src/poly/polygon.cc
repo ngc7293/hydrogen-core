@@ -44,6 +44,8 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
 		if (abs(angle - a.joints()[i].angle()) > M_PI/2)
 			continue;
+
+		// Test the current A_joint against all joints from B
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
 			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI/2)
 				continue;
@@ -83,6 +85,7 @@ std::vector<Vector> Polygon::collision_points(Polygon& a, Polygon& b)
 Polygon::Polygon(float x, float y)
 	: pos_(x, y)
 {
+	radius_ = 0;
 }
 
 Polygon::~Polygon() {}
@@ -162,24 +165,20 @@ float Polygon::move_until(Vector motion, Polygon& b)
 {
 	float maxfactor(1);
 
+	// If they are out of reach of eacher other, return 1
 	if (trig::distance_sq(pos_, b.pos()) > pow(radius_ + b.radius() + motion.length(), 2))
 		return maxfactor;
 
-	// Go through all joints combinations, skipping joints in the opposite direction of the possible collision
+	// Go through all joints combinations, and check the minimal distance between those point on motion vector
 	float angle = atan2(b.pos().y() - pos_.y(), b.pos().x() - pos_.x());
-	float angle2 = angle + M_PI;
-	if (angle2 > 2*M_PI)
-		angle2 -= 2*M_PI;
-	if (angle2 < 0)
-		angle += 2*M_PI;
+	float angle2 = atan2(pos_.y() - b.pos().y(), pos_.x() - b.pos().x());
 
+#ifdef _DEBUG
 	al_draw_line(pos_.x(), pos_.y(), pos_.x() + 32 * cos(angle), pos_.y() + 32 * sin(angle), al_map_rgb(255,255,255), 2);
 	al_draw_line(b.pos().x(), b.pos().y(), b.pos().x() + 32 * cos(angle2), b.pos().y() + 32 * sin(angle2), al_map_rgb(255,255,255), 2);
+#endif
 
 	for (unsigned int i(0); i < joints_.size() - 1; i++) {
-		if (abs(joints_[i].angle() - angle) > M_PI / 2) 
-			continue;
-
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {			
 			float factor;
 			Vector point = Segment::intersection_point(Segment(pos_ + joints_[i], motion),

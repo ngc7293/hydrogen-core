@@ -48,16 +48,6 @@ void Vector::operator-=(Vector vec)
 	y_ -= vec.y();
 }
 
-//Vector Vector::operator*(int k)
-//{
-//	return Vector(k * x_, k * y_);
-//}
-
-//Vector Vector::operator*(int k)
-//{
-//	return Vector(k * x_, k * y_);
-//}
-
 Vector Vector::operator*(float k)
 {
 	return Vector(k * x_, k * y_);
