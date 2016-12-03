@@ -29,6 +29,9 @@
 *.out
 *.app
 
+# C dependencies
+*.d
+
 # Sublime Text project files
 *.sublime-project
 *.sublime-workspace
