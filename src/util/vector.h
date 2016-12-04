@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#define vec2 Vector<float>
+
 template <typename T>
 class Vector {
 public:
