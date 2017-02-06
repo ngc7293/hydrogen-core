@@ -85,7 +85,7 @@ T Vector<T>::operator*(const Vector<T>& vec) const
 template <typename T>
 T Vector<T>::operator%(const Vector<T>& vec) const
 {
-	return x_ * vec.x() - y_ * vec.y();
+	return x_ * vec.y() - y_ * vec.x();
 }
 template <typename T>
 bool Vector<T>::operator==(const Vector<T>& vec) const

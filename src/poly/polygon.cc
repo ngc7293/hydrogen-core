@@ -42,13 +42,13 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	// Ignores joints pointing away from to possible collision.
 	float angle = atan2(b.pos().y() - a.pos().y(), b.pos().x() - a.pos().x());
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
-		if (abs(angle - a.joints()[i].angle()) > M_PI/2)
-			continue;
+		//if (abs(angle - a.joints()[i].angle()) > M_PI/2)
+		//	continue;
 
 		// Test the current A_joint against all joints from B
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
-			if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI/2)
-				continue;
+		//	if (abs((angle - M_PI) - b.joints()[j].angle()) > M_PI/2)
+		//		continue;
 			if (Segment::intersection(
 					Segment(a.pos() + a.joints()[i], a.joints()[i + 1] - a.joints()[i]),
 					Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j])))
@@ -81,6 +81,13 @@ std::vector<vecf> Polygon::collision_points(Polygon& a, Polygon& b)
 
 	return points;
 }
+
+Polygon::Polygon(vecf pos)
+	: pos_(pos)
+{
+	radius_ = 0;
+}
+
 
 Polygon::Polygon(float x, float y)
 	: pos_(x, y)
@@ -124,6 +131,11 @@ void Polygon::add(vecf joint)
 
 	// Take the longest radius
 	radius_ = (pow(radius_, 2) > joint.length_sq() ? radius_ : joint.length());
+}
+
+void Polygon::move(vecf pos)
+{
+	pos_ = pos;
 }
 
 void Polygon::move(float x, float y)

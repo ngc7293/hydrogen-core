@@ -34,7 +34,8 @@ public:
 	// Finds the minimal distance between two polygons. This is relatively well optimized.
 	static float distance(Polygon& a, Polygon& b);
 
-public:	
+public:
+	Polygon(vecf pos);
 	Polygon(float x, float y);
 	~Polygon();
 
@@ -44,6 +45,7 @@ public:
 
 	// Move the polygon to position (x,y). To check for possible collisions, consider using 
 	// move_until() or collision()
+	void move(vecf pos);
 	void move(float x, float y);
 
 	// Rotate the polygon around it's origin (pos_). This does not do any collision checking.
