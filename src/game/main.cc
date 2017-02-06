@@ -5,8 +5,6 @@
 #include "manager.h"
 #include "vector.h"
 
-#include "test.h"
-
 int main(int argc, char const* argv[])
 {
 	// Setup the Game object

@@ -58,15 +58,15 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	return false;
 }
 
-std::vector<vec2> Polygon::collision_points(Polygon& a, Polygon& b)
+std::vector<vecf> Polygon::collision_points(Polygon& a, Polygon& b)
 {
-	std::vector<vec2> points;
+	std::vector<vecf> points;
 	if (trig::distance_sq(a.pos(), b.pos()) > pow(a.radius() + b.radius(), 2))
 		return points;
 
 	for (unsigned int i(0); i < a.joints().size() - 1; i++) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {
-			vec2 point = Segment::intersection_point(
+			vecf point = Segment::intersection_point(
 				Segment(a.pos() + a.joints()[i], a.joints()[i + 1] - a.joints()[i]),
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
 
@@ -112,7 +112,7 @@ float Polygon::distance(Polygon& a, Polygon& b)
 	return Segment::distance(from_a, from_b);
 }
 
-void Polygon::add(vec2 joint)
+void Polygon::add(vecf joint)
 {
 	if (joints_.size() > 1)
 		joints_.pop_back();
@@ -128,7 +128,7 @@ void Polygon::add(vec2 joint)
 
 void Polygon::move(float x, float y)
 {
-	pos_ = vec2(x, y);
+	pos_ = vecf(x, y);
 }
 
 void Polygon::rotate(float angle)
@@ -151,7 +151,7 @@ bool Polygon::collision(Polygon& b)
 	return collision(*this, b);
 }
 
-std::vector<vec2> Polygon::collision_points(Polygon& b)
+std::vector<vecf> Polygon::collision_points(Polygon& b)
 {
 	return collision_points(*this, b);
 }
@@ -161,7 +161,7 @@ float Polygon::distance(Polygon& b)
 	return distance(*this, b);
 }
 //TODO: Document me
-float Polygon::move_until(vec2 motion, Polygon& b)
+float Polygon::move_until(vecf motion, Polygon& b)
 {
 	float maxfactor(1);
 
@@ -181,9 +181,9 @@ float Polygon::move_until(vec2 motion, Polygon& b)
 	for (unsigned int i(0); i < joints_.size() - 1; i++) {
 		for (unsigned int j(0); j < b.joints().size() - 1; j++) {			
 			float factor;
-			vec2 point = Segment::intersection_point(Segment(pos_ + joints_[i], motion),
+			vecf point = Segment::intersection_point(Segment(pos_ + joints_[i], motion),
 				Segment(b.pos() + b.joints()[j], b.joints()[j + 1] - b.joints()[j]));
-			vec2 point2 = Segment::intersection_point(Segment(b.pos() + b.joints()[j], -motion),
+			vecf point2 = Segment::intersection_point(Segment(b.pos() + b.joints()[j], -motion),
 				Segment(pos_ + joints_[i], joints_[i + 1] - joints_[i]));
 
 

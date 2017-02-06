@@ -5,6 +5,7 @@
 #include "input.h"
 #include "manager.h"
 #include "media.h"
+#include "view.h"
 
 #ifndef GAME_H_
 #define GAME_H_
@@ -36,6 +37,7 @@ private:
 	Input* input_;
 	Manager* manager_;
 	Media* media_;
+	View* view_;
 
 private:
 	Game();
@@ -60,6 +62,8 @@ public:
 
 	// Return the media IO module
 	Media& media() { return *media_; }
+
+	View& view() { return *view_; }
 
 	// Return the main display
 	ALLEGRO_DISPLAY* display() { return display_; }

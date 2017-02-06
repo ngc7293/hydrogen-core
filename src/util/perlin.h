@@ -13,7 +13,7 @@ public:
 
 public:
 	static void seed(unsigned int seed);
-	static float noise(vec2 pos);
+	static float noise(vecf pos);
 	static float noise(float x, float y);
 
 private:
@@ -24,4 +24,4 @@ private:
 
 }
 
-#endif 
+#endif

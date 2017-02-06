@@ -7,6 +7,8 @@
 #include <allegro5/allegro_primitives.h>
 #endif
 
+#include <cmath>
+
 #include "trig.h"
 
 namespace hc {
@@ -17,13 +19,13 @@ Segment::Segment()
 {
 }
 
-Segment::Segment(vec2 pos, vec2 dir)
+Segment::Segment(vecf pos, vecf dir)
 	: pos_(pos)
 	, dir_(dir)
 {
 }
 
-Segment::Segment(float x, float y, vec2 dir)
+Segment::Segment(float x, float y, vecf dir)
 	: pos_(x, y)
 	, dir_(dir)
 {
@@ -56,10 +58,10 @@ float Segment::distance(Segment a, Segment b)
 	return min;
 }
 
-float Segment::distance(Segment a, vec2 p)
+float Segment::distance(Segment a, vecf p)
 {
 	// If segment 'a' is a point (length 0), return the distance(a, p)
-	if (a.dir() == vec2(0, 0))
+	if (a.dir() == vecf(0, 0))
 		return trig::distance(a.pos(), p);
 
 	// Find the closest point on line 'a' with the form [ao + t * ad]
@@ -87,7 +89,7 @@ bool Segment::intersection(Segment a, Segment b)
 	return !std::isnan(intersection_point(a, b).x());
 }
 
-vec2 Segment::intersection_point(Segment a, Segment b)
+vecf Segment::intersection_point(Segment a, Segment b)
 {
 	// Most of the credit for this algorithm goes to Stack Overflow user Gareth Rees.
 	// This is essentially a step-step C++ copy of his answer linked below.
@@ -96,7 +98,7 @@ vec2 Segment::intersection_point(Segment a, Segment b)
 	// To keep the comments readable I have shortened 'a.pos' to 'ao' and 'a.dir' to 'ad'.
 	// Same goes for 'b.pos' and 'b.dir'.
 
-	// Remember that hc::vec2 overloads the % operator as a cross-product operator
+	// Remember that vecf overloads the % operator as a cross-product operator
 
 	// if [ad x bd == 0] then both vectors are parallel
 	if (a.dir() % b.dir() == 0) {
@@ -119,9 +121,9 @@ vec2 Segment::intersection_point(Segment a, Segment b)
 				else
 					return (b.pos() + a.end()) * 0.5f;
 			else
-				return vec2(NAN, NAN);
+				return vecf(NAN, NAN);
 		} else {
-			return vec2(NAN, NAN);
+			return vecf(NAN, NAN);
 		}
 
 		// if [ad x bd != 0] then both segment might intersect (they would if they were infinite)
@@ -134,7 +136,7 @@ vec2 Segment::intersection_point(Segment a, Segment b)
 		if (0 <= u && u <= 1 && 0 <= t && t <= 1)
 			return a.pos() + a.dir() * t;
 		else
-			return vec2(NAN, NAN);
+			return vecf(NAN, NAN);
 	}
 }
 
