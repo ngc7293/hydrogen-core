@@ -9,18 +9,17 @@ public:
 	// Note : this enum is also used to order the objects in the manager's array,
 	// So Types nearer to the top will update() first, and render first().
 	// The Types nearer to the bottom will render() over them.
-	enum Type { DEFAULT,
-		TEST };
+	static const int TYPE_ID = 0;
 
 private:
 	// The type of the object
-	Type type_;
+	int type_;
 
 	// Destruction flag
 	bool destroy_;
 
 public:
-	Object(Type type = DEFAULT);
+	Object(int type = TYPE_ID);
 	virtual ~Object();
 
 	// The object's update function. Is called $FPS times per second in the game loop
@@ -32,7 +31,7 @@ public:
 	virtual void render() = 0;
 
 	// Return the objet type
-	Type type() { return type_; }
+	int type() { return type_; }
 
 	// Return if the object is flagged for deletion
 	bool destroy() { return destroy_; }

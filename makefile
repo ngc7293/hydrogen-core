@@ -1,6 +1,6 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -D _DEBUG -c -g -Wall -std=c++11
+CXXFLAGS = -MMD -D _DEBUG -c -g -Wall -std=c++11
 ALLEG =`pkg-config --cflags --libs allegro-5 allegro_primitives-5 allegro_image-5 allegro_font-5 allegro_ttf-5`
 
 SRC_DIR := src/
@@ -12,9 +12,7 @@ SRCS := $(foreach sdir,$(SUBFOLDERS),$(wildcard $(sdir)*.cc))
 BINS := $(patsubst $(SRC_DIR)%.cc,$(BIN_DIR)%.o,$(SRCS))
 DEPS := $(patsubst $(SRC_DIR)%.cc,$(BIN_DIR)%.d,$(SRCS))
 
-POLYSRCS = $(wildcard src/poly/*.cc)
-POLYOBJS = $(patsubst src/poly/%.cc,obj/poly/%.o,$(POLYSRCS))
-POLYDEPS = $(patsubst src/poly/%.cc,obj/poly/%.d,$(POLYSRCS))
+all: hc.o
 
 hc.o: $(BINS)
 	@echo $@

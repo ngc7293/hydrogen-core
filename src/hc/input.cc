@@ -10,8 +10,7 @@ Input::Input()
 	for (int i(0); i < MOUSE_BUTTON_MAX; i++)
 		mousebutton_[i] = UP;
 
-	mx_ = 0;
-	my_ = 0;
+	mxy_ = vecf(0, 0);
 	mz_ = -2;
 }
 
@@ -33,8 +32,7 @@ void Input::handle(ALLEGRO_EVENT& event)
 
 	// React to the mouse moving about
 	if (event.type == ALLEGRO_EVENT_MOUSE_AXES) {
-		mx_ = event.mouse.x;
-		my_ = event.mouse.y;
+		mxy_ = vecf(event.mouse.x, event.mouse.y);
 		mz_ = event.mouse.z;
 	}
 }
@@ -82,6 +80,12 @@ bool Input::isMouseButton(State state, int button)
 		return true;
 
 	return false;
+}
+
+void Input::set_mz(float mz)
+{
+	mz_ = mz;
+	al_set_mouse_z(mz);
 }
 
 } //namespace hc

@@ -21,7 +21,7 @@ void Manager::add(Object* object)
 {
 	if (find(object) == -1) {
 		unsigned int i(0);
-		for (; i < objects_.size() && objects_[i]->type() < object->type(); i++);
+		for (; i < objects_.size() && objects_[i]->type() < object->type(); i++)
 		objects_.insert(objects_.begin() + i, object);
 	}
 }
@@ -45,24 +45,6 @@ int Manager::find(Object* object)
 		if (objects_[i] == object)
 			return i;
 	return -1;
-}
-
-Object* Manager::first(Object::Type filter)
-{
-	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
-			return objects_[i];
-	return nullptr;
-}
-
-std::vector<Object*> Manager::all(Object::Type filter)
-{
-	std::vector<Object*> found;
-
-	for (unsigned int i(0); i < objects_.size(); i++)
-		if (objects_[i]->type() == filter)
-			found.push_back(objects_[i]);
-	return found;
 }
 
 void Manager::update()

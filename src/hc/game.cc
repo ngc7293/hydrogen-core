@@ -10,9 +10,6 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-#include "input.h"
-#include "manager.h"
-
 namespace hc {
 
 Game::Game()
@@ -32,9 +29,10 @@ Game::Game()
 	al_install_mouse();
 
 	// Modules
-	input_ = new Input();
+	view_ = new View();
 	manager_ = new Manager();
 	media_ = new Media();
+	input_ = new Input();
 
 	// Flags
 	run_ = true;
@@ -61,13 +59,14 @@ Game::Game()
 
 Game::~Game()
 {
+	delete view_;
+	delete manager_;
+	delete media_;
+	delete input_;
+
 	al_destroy_display(display_);
 	al_destroy_timer(timer_);
 	al_destroy_event_queue(eventqueue_);
-
-	delete input_;
-	delete media_;
-	delete manager_;
 }
 
 bool Game::loop()
@@ -77,13 +76,15 @@ bool Game::loop()
 
 	input_->handle(event);
 
+	// Quit game on display close or ESC
 	if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		return false;
-
-	if (input_->isKey(Input::RELEASED, ALLEGRO_KEY_ESCAPE))
+	else if (input_->isKey(Input::RELEASED, ALLEGRO_KEY_ESCAPE))
 		return false;
 
-	if (event.type == ALLEGRO_EVENT_TIMER) {
+	// Game tick
+	else if (event.type == ALLEGRO_EVENT_TIMER) {
+		view_->update();
 		manager_->update();
 		input_->update();
 		render_ = true;
