@@ -35,3 +35,6 @@
 # Sublime Text project files
 *.sublime-project
 *.sublime-workspace
+
+# VSCode project files
+.vscode/
