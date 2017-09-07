@@ -42,7 +42,7 @@ float Perlin::noise(float x, float y)
 	float res = lerp(0, lerp(v, lerp(u, grad(p[A], x, y, 0), grad(p[B], x - 1, y, 0)),
 							lerp(u, grad(p[A + 1], x, y - 1, 0), grad(p[B + 1], x - 1, y - 1, 0))),
 		lerp(v, lerp(u, grad(p[A + 1], x, y, -1), grad(p[A + 1], x - 1, y, -1)),
-						 lerp(u, grad(p[A + 2], x, y - 1, -1), grad(p[B + 2], x - 1, y - 1, -1))));
+			lerp(u, grad(p[A + 2], x, y - 1, -1), grad(p[B + 2], x - 1, y - 1, -1))));
 	return (res + 1.0) / 2.0;
 }
 

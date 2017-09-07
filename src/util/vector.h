@@ -9,7 +9,7 @@ template <typename T>
 class Vector {
 public:
 	// If this is enabled, vectors within 1e-6 difference are considered equal.
-	// This can help with sin and cos being ever so slightly imprecise.
+	// This can help with floating point imprecision 
 	// This is set to false by default.
 	static bool USE_PERMISSIVE_EQUALITY;
 
