@@ -41,15 +41,15 @@ private:
 
 private:
 	Game();
+	~Game();
 
 public:
 	// Singleton access to the game
 	static Game& game()
 	{
-		static Game* game_ = new Game();
-		return *game_;
+		static Game game_ = Game();
+		return game_;
 	}
-	~Game();
 
 	// The main game loop. Return false if the game should end
 	bool loop();

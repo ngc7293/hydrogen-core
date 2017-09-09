@@ -42,7 +42,6 @@ public:
 	void render();
 #endif
 };
-
-} //namespace hc
+};
 
 #endif

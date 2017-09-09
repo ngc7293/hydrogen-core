@@ -1,5 +1,5 @@
-#ifndef POLYGON_H_
-#define POLYGON_H_
+#ifndef BOX_H_
+#define BOX_H_
 
 #include <vector>
 
@@ -9,7 +9,7 @@
 
 namespace hc {
 
-class Polygon : public Object {
+class Box : public Object {
 public:
 	static const int TYPE_ID = 1;
 
@@ -21,16 +21,16 @@ private:
 	float radius_sq_;
 	std::vector<vecf> joints_;
 
-	// Is this polygon controlled by the user
+	// Is this box controlled by the user
 	bool control_;
 
 public:
-	static bool collision(Polygon& a, Polygon& b);
-	static vecf resolve(Polygon& a, Polygon& b); // Where a is movable and b is fixed
+	static bool collision(Box& a, Box& b);
+	static vecf resolve(Box& a, Box& b); // Where a is movable and b is fixed
 
 public:
-	Polygon(vecf pos, bool control = false);
-	~Polygon();
+	Box(vecf pos, bool control = false);
+	~Box();
 	
 	void add(vecf vec);
 	void rotate(float angle);

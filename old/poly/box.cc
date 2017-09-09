@@ -1,4 +1,4 @@
-#include "polygon.h"
+#include "box.h"
 
 #include <algorithm>
 #include <iostream>
@@ -17,7 +17,7 @@
 
 namespace hc {
 
-bool Polygon::collision(Polygon& a, Polygon& b)
+bool Box::collision(Box& a, Box& b)
 {
 	// v1 = 421 clocks
 
@@ -70,7 +70,7 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 	return true;
 }
 
-vecf Polygon::resolve(Polygon& a, Polygon& b)
+vecf Box::resolve(Box& a, Box& b)
 {
 	// If both objects are not within reach of each other, quit
 	if (a.radius_sq() + b.radius_sq() < (a.pos() - b.pos()).length_sq())
@@ -133,20 +133,20 @@ vecf Polygon::resolve(Polygon& a, Polygon& b)
 	return mov;
 }
 
-Polygon::Polygon(vecf pos, bool control)
-	: Object(Polygon::TYPE_ID)
+Box::Box(vecf pos, bool control)
+	: Object(Box::TYPE_ID)
 	, pos_(pos)
-	, joints_()
 	, control_(control)
+	, joints_()
 {
 	radius_sq_ = 0;
 }
 
-Polygon::~Polygon()
+Box::~Box()
 {
 }
 
-void Polygon::add(vecf joint)
+void Box::add(vecf joint)
 {
 	if (joints_.size() > 1)
 		joints_.pop_back();
@@ -160,14 +160,14 @@ void Polygon::add(vecf joint)
 		radius_sq_ = (joint.length_sq() * 2);	
 }
 
-void Polygon::rotate(float angle)
+void Box::rotate(float angle)
 {
 	for (unsigned int i = 0; i < joints_.size(); i++) {
 		joints_[i].set_angle(joints_[i].angle() + angle);
 	}
 }
 
-void Polygon::update()
+void Box::update()
 {
 	if (!control_)
 		return;
@@ -191,15 +191,15 @@ void Polygon::update()
 	if (input.isKey(Input::DOWN, ALLEGRO_KEY_E))
 		rotate(+0.02f);
 
-	std::vector<Polygon*> Polygones = Game::game().manager().all<Polygon>();
-	for (Polygon* other : Polygones) {
+	std::vector<Box*> boxes = Game::game().manager().all<Box>();
+	for (Box* other : boxes) {
 		if (other == this)
 			continue;
-		pos_ += Polygon::resolve(*this, *other);
+		pos_ += Box::resolve(*this, *other);
 	}
 }
 
-void Polygon::render()
+void Box::render()
 {
 	for (unsigned int i = 1; i < joints_.size(); i++)
 		Segment(joints_[i - 1] + pos_, joints_[i] - joints_[i - 1]).render();

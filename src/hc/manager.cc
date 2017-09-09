@@ -11,10 +11,15 @@ Manager::Manager() {}
 
 Manager::~Manager()
 {
+	unsigned int deleted = 0;
+
 	while (objects_.size()) {
 		delete objects_[0];
 		objects_.erase(objects_.begin());
+		deleted++;
 	}
+
+	std::cout << "[Manager] Deleted " << deleted << " objects." << std::endl;
 }
 
 void Manager::add(Object* object)

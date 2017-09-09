@@ -109,6 +109,20 @@ Vector<T> Vector<T>::project(const Vector<T>& vec) const
 }
 
 template <typename T>
+Vector<T> Vector<T>::normal() const
+{
+	return Vector<T>(y_, -x_);
+}
+
+template <typename T>
+Vector<T> Vector<T>::unit() const 
+{
+	Vector<T> u = *this;
+	u.set_length(1);
+	return u;
+}
+
+template <typename T>
 void Vector<T>::set_length(T length)
 {
 	T angle = Vector::angle();
