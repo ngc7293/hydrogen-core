@@ -37,13 +37,6 @@ bool Polygon::collision(Polygon& a, Polygon& b)
 			axes.push_back(ax);
 	}
 
-#ifdef _DEBUG
-	Input& input = Game::game().input();
-	for (vecf& axis : axes) {
-		al_draw_line(input.mx() - 10, input.my() - 10, input.mx() + (axis * 10).x() - 10, input.my() + (axis * 10).y() - 10, al_map_rgb(255, 127, 127), 2);
-	}
-#endif
-
 	float maxa, mina, maxb, minb, x;
 	for (vecf& axis : axes) {
 		maxa = mina = (((a.pos()) * axis) / (axis * axis));
@@ -133,11 +126,10 @@ vecf Polygon::resolve(Polygon& a, Polygon& b)
 	return mov;
 }
 
-Polygon::Polygon(vecf pos, bool control)
+Polygon::Polygon(vecf pos)
 	: Object(Polygon::TYPE_ID)
 	, pos_(pos)
 	, joints_()
-	, control_(control)
 {
 	radius_sq_ = 0;
 }
@@ -169,36 +161,9 @@ void Polygon::rotate(float angle)
 
 void Polygon::update()
 {
-	if (!control_)
-		return;
-
-	Input& input = Game::game().input();
-
-	int xto = 0, yto = 0;
-	(input.isKey(Input::DOWN, ALLEGRO_KEY_W)) && yto--;
-	(input.isKey(Input::DOWN, ALLEGRO_KEY_S)) && yto++;
-	(input.isKey(Input::DOWN, ALLEGRO_KEY_A)) && xto--;
-	(input.isKey(Input::DOWN, ALLEGRO_KEY_D)) && xto++;
-
-	if (xto || yto) {
-		vecf mov = vecf(xto, yto);
-		mov.set_length(3);
-		pos_ += mov;
-	}
-
-	if (input.isKey(Input::DOWN, ALLEGRO_KEY_Q))
-		rotate(-0.02f);
-	if (input.isKey(Input::DOWN, ALLEGRO_KEY_E))
-		rotate(+0.02f);
-
-	std::vector<Polygon*> Polygones = Game::game().manager().all<Polygon>();
-	for (Polygon* other : Polygones) {
-		if (other == this)
-			continue;
-		pos_ += Polygon::resolve(*this, *other);
-	}
 }
 
+#ifdef _DEBUG
 void Polygon::render()
 {
 	for (unsigned int i = 1; i < joints_.size(); i++)
@@ -206,5 +171,6 @@ void Polygon::render()
 
 	al_draw_circle(pos_.x(), pos_.y(), sqrt(radius_sq_), al_map_rgb(127,127,255), 2);
 }
+#endif
 
 } //namespace hc
