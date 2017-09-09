@@ -85,7 +85,7 @@ T Vector<T>::operator*(const Vector<T>& vec) const
 template <typename T>
 T Vector<T>::operator%(const Vector<T>& vec) const
 {
-	return x_ * vec.x() - y_ * vec.y();
+	return x_ * vec.y() - y_ * vec.x();
 }
 template <typename T>
 bool Vector<T>::operator==(const Vector<T>& vec) const
@@ -106,6 +106,20 @@ template <typename T>
 Vector<T> Vector<T>::project(const Vector<T>& vec) const
 {
 	return (vec == 0 ? Vector<T>(0, 0) : Vector<T>(vec.x(), vec.y()) * ((*this * vec) / (vec * vec)));
+}
+
+template <typename T>
+Vector<T> Vector<T>::normal() const
+{
+	return Vector<T>(y_, -x_);
+}
+
+template <typename T>
+Vector<T> Vector<T>::unit() const 
+{
+	Vector<T> u = *this;
+	u.set_length(1);
+	return u;
 }
 
 template <typename T>

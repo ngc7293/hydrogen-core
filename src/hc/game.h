@@ -1,14 +1,14 @@
-#ifndef GAME_H_
-#define GAME_H_
-
 #include <allegro5/allegro.h>
 
-#include "defs.h"
+#include "defaults.h"
 
 #include "input.h"
 #include "manager.h"
 #include "media.h"
 #include "view.h"
+
+#ifndef GAME_H_
+#define GAME_H_
 
 namespace hc {
 
@@ -41,6 +41,7 @@ private:
 
 private:
 	Game();
+	~Game();
 
 public:
 	// Singleton access to the game
@@ -49,7 +50,6 @@ public:
 		static Game game_ = Game();
 		return game_;
 	}
-	~Game();
 
 	// The main game loop. Return false if the game should end
 	bool loop();
@@ -63,7 +63,6 @@ public:
 	// Return the media IO module
 	Media& media() { return *media_; }
 
-	// Return the viewport
 	View& view() { return *view_; }
 
 	// Return the main display

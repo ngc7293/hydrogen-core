@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#define vec2 Vector<float>
-
 template <typename T>
 class Vector {
 public:
@@ -52,6 +50,12 @@ public:
 
 	// Projection
 	Vector<T> project(const Vector<T>& vec) const;
+
+	// Returns the vector orthogonal to the provided vector
+	Vector<T> normal() const;
+
+	// Return the unit vector version of this
+	Vector<T> unit() const;
 
 	// Setting components
 	void set_x(T x) { x_ = x; }

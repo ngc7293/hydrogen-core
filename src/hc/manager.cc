@@ -11,10 +11,15 @@ Manager::Manager() {}
 
 Manager::~Manager()
 {
+	unsigned int deleted = 0;
+
 	while (objects_.size()) {
 		delete objects_[0];
 		objects_.erase(objects_.begin());
+		deleted++;
 	}
+
+	std::cout << "[Manager] Deleted " << deleted << " objects." << std::endl;
 }
 
 void Manager::add(Object* object)
@@ -22,6 +27,7 @@ void Manager::add(Object* object)
 	if (find(object) == -1) {
 		unsigned int i(0);
 		for (; i < objects_.size() && objects_[i]->type() < object->type(); i++)
+			;
 		objects_.insert(objects_.begin() + i, object);
 	}
 }
