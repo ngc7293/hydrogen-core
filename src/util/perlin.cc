@@ -1,6 +1,7 @@
 #include "perlin.h"
 
 #include <algorithm>
+#include <iostream>
 #include <random>
 
 #include <iostream>
@@ -22,28 +23,34 @@ void Perlin::seed(unsigned int seed)
 
 float Perlin::noise(vec2 pos)
 {
-	return noise(pos.x(), pos.y());
+	return noise(pos.x(), pos.y(), 0);
 }
 
-float Perlin::noise(float x, float y)
+float Perlin::noise(float x, float y, float z)
 {
-	int X = (int)floor(x) & 255;
-	int Y = (int)floor(y) & 255;
+	int X = ((int)floor(x)) & 255;
+	int Y = ((int)floor(y)) & 255;
+	int Z = ((int)floor(z)) & 255;
 
 	x -= floor(x);
 	y -= floor(y);
+	z -= floor(z);
 
 	float u = fade(x);
 	float v = fade(y);
+	float w = fade(z);
 
-	int A = p[X] + Y;
-	int B = p[X + 1] + Y;
+	int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
+	int B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
 
-	float res = lerp(0, lerp(v, lerp(u, grad(p[A], x, y, 0), grad(p[B], x - 1, y, 0)),
-							lerp(u, grad(p[A + 1], x, y - 1, 0), grad(p[B + 1], x - 1, y - 1, 0))),
-		lerp(v, lerp(u, grad(p[A + 1], x, y, -1), grad(p[A + 1], x - 1, y, -1)),
-			lerp(u, grad(p[A + 2], x, y - 1, -1), grad(p[B + 2], x - 1, y - 1, -1))));
-	return (res + 1.0) / 2.0;
+	return (lerp(w, lerp(v, lerp(u, grad(p[AA  ], x    , y    , z    ),
+									grad(p[BA  ], x - 1, y    , z    )),
+							lerp(u, grad(p[AB  ], x    , y - 1, z    ),
+						   			grad(p[BB  ], x - 1, y - 1, z    ))),
+					lerp(v, lerp(u, grad(p[AA+1], x    , y    , z - 1),
+				   					grad(p[BA+1], x - 1, y    , z - 1)),
+				   			lerp(u, grad(p[AB+1], x    , y - 1, z - 1),
+				   		   	    	grad(p[BB+1], x - 1, y - 1, z - 1)))) + 1.0) / 2.0;
 }
 
 float Perlin::fade(float t)

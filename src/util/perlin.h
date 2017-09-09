@@ -14,7 +14,7 @@ public:
 public:
 	static void seed(unsigned int seed);
 	static float noise(vec2 pos);
-	static float noise(float x, float y);
+	static float noise(float x, float y, float z);
 
 private:
 	static float fade(float t);
