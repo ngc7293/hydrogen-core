@@ -40,7 +40,8 @@ float Perlin::noise(float x, float y, float z)
 	float v = fade(y);
 	float w = fade(z);
 
-	int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
+	// clang-format off
+	int A = p[X    ] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
 	int B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
 
 	return (lerp(w, lerp(v, lerp(u, grad(p[AA  ], x    , y    , z    ),
@@ -51,6 +52,7 @@ float Perlin::noise(float x, float y, float z)
 				   					grad(p[BA+1], x - 1, y    , z - 1)),
 				   			lerp(u, grad(p[AB+1], x    , y - 1, z - 1),
 				   		   	    	grad(p[BB+1], x - 1, y - 1, z - 1)))) + 1.0) / 2.0;
+	// clang-format on
 }
 
 float Perlin::fade(float t)
