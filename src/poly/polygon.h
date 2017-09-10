@@ -3,23 +3,25 @@
 
 #include <vector>
 
-#include "object.h"
-#include "segment.h"
 #include "vector.h"
 
 namespace hc {
 
-class Polygon : public Object {
-public:
-	static const int TYPE_ID = 1;
-
+class Polygon {
 private:
-	// Position
+	// Current position of the polygon, in worldspace
 	vecf pos_;
 
-	// Collision data
+	// Square of the radius of the smallest circle centered on pos_ in which the polygon fits
+	// 16 is added to this value to help with collision checking
 	float radius_sq_;
+
+	// A list of all the joints that make up this polygon. The last joint is a copy of the first one
+	// to simplify for-loops in code. This circularity is implemented in the add() function
 	std::vector<vecf> joints_;
+
+private:
+	static std::vector<vecf> find_axes(Polygon& a, Polygon& b);
 
 public:
 	static bool collision(Polygon& a, Polygon& b);
@@ -29,17 +31,20 @@ public:
 	Polygon(vecf pos);
 	~Polygon();
 	
-	void add(vecf vec);
 	void rotate(float angle);
+	void scale(float factor);
 
-	virtual void update();
-	virtual void render();
-
+	void add(vecf vec);
 	std::vector<vecf> joints() const { return joints_; }
+
 	vecf pos() const { return pos_; }
+	void set_pos(vecf pos) { pos_ = pos; }
+
 	float radius_sq() const { return radius_sq_; }
 
-	void set_pos(vecf pos) { pos_ = pos; }
+#ifdef _DEBUG
+	void render();
+#endif
 };
 
 } //namespace hc

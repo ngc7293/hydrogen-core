@@ -21,7 +21,7 @@ void Perlin::seed(unsigned int seed)
 	p.insert(p.end(), p.begin(), p.end());
 }
 
-float Perlin::noise(vec2 pos)
+float Perlin::noise(vecf pos)
 {
 	return noise(pos.x(), pos.y(), 0);
 }
