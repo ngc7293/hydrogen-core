@@ -1,8 +1,9 @@
 #include "manager.h"
 
-#include <iostream>
+#include <string>
 #include <vector>
 
+#include "log.h"
 #include "object.h"
 
 namespace hc {
@@ -19,7 +20,7 @@ Manager::~Manager()
 		deleted++;
 	}
 
-	std::cout << "[Manager] Deleted " << deleted << " objects." << std::endl;
+	Log::log(Log::INFO, "Manager", "Destroyed " + std::to_string(deleted) + " objects");
 }
 
 void Manager::add(Object* object)

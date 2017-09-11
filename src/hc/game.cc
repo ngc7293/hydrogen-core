@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <cstdint>
 #include <ctime>
 
 #include <allegro5/allegro.h>
@@ -9,6 +10,12 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+
+#include "input.h"
+#include "log.h"
+#include "manager.h"
+#include "media.h"
+#include "view.h"
 
 namespace hc {
 
@@ -27,6 +34,13 @@ Game::Game()
 	// Install input devices
 	al_install_keyboard();
 	al_install_mouse();
+
+	// Setup log and broadcast Allegro version
+	Log::set_console_level(Log::WARNING);
+	Log::set_logfile_level(Log::WARNING);
+
+	uint32_t version = al_get_allegro_version();
+	Log::log(Log::INFO, "Game", "Initialized Allegro v" + std::to_string(version >> 24) + "." + std::to_string((version >> 16) & 255) + "." + std::to_string((version >> 8) & 255) + "." + std::to_string(version & 255));
 
 	// Modules
 	view_ = new View();
@@ -51,14 +65,26 @@ Game::Game()
 	// Event Queue
 	eventqueue_ = al_create_event_queue();
 
+	// Register event sources
 	al_register_event_source(eventqueue_, al_get_display_event_source(display_));
 	al_register_event_source(eventqueue_, al_get_timer_event_source(timer_));
 	al_register_event_source(eventqueue_, al_get_keyboard_event_source());
 	al_register_event_source(eventqueue_, al_get_mouse_event_source());
+
+	// Load on-screen debug info font
+	font_ = media_->font("mono.ttf", 12);
+
+	// Debug info
+	display_fps_ = true;
+	last_frame_ = al_get_time();
+
+	display_masks_ = false;
 }
 
 Game::~Game()
 {
+	media_->unref(font_);
+
 	delete view_;
 	delete manager_;
 	delete media_;
@@ -98,9 +124,28 @@ bool Game::loop()
 		// Tell the objects to render
 		manager_->render();
 
+		// FPS counter display
+		if (display_fps_) {
+			al_draw_filled_rectangle(0, 0, 16, 12, al_map_rgb(0, 0, 0));
+			al_draw_textf(font_, al_map_rgb(255, 255, 255), 0, 0, 0, "%i", (int)(1 / (al_get_time() - last_frame_)));
+			last_frame_ = al_get_time();
+		}
+
 		// Flip the buffer, and clear it
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
+	}
+
+	// Debug toggles
+	if (event.type == ALLEGRO_EVENT_KEY_CHAR || event.keyboard.modifiers & ALLEGRO_KEYMOD_CTRL) {
+		switch (event.keyboard.keycode) {
+		case ALLEGRO_KEY_B:
+			display_fps_ = !display_fps_;
+			break;
+		case ALLEGRO_KEY_M:
+			display_masks_ = !display_masks_;
+			break;
+		}
 	}
 
 	return run_;

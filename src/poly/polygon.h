@@ -42,9 +42,7 @@ public:
 
 	float radius_sq() const { return radius_sq_; }
 
-#ifdef _DEBUG
 	void render();
-#endif
 };
 
 } //namespace hc

@@ -38,9 +38,7 @@ public:
 	vecf& dir() { return dir_; }
 	vecf end() { return pos_ + dir_; }
 
-#ifdef _DEBUG
 	void render();
-#endif
 };
 
 } //namespace hc

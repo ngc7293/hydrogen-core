@@ -13,7 +13,7 @@ class Input {
 public:
 	// Possible States for keyboard keys and mouse buttons.
 	// Note : With this logic, a key or button will be set as PRESSED or RELEASED for a full tick,
-	// before being set to DOWN or UP. This allows the objects to react to a key press or release, 
+	// before being set to DOWN or UP. This allows the objects to react to a key press or release,
 	// whilst keeping all the code inside the Object::update() function.
 	// To ensure this works properly, Manager::update() must be called before Input::update().
 	enum State { PRESSED,

@@ -1,11 +1,15 @@
 #include "media.h"
 
-#include <iostream>
 #include <string>
 #include <vector>
 
+#include <cstdlib>
+#include <cstdio>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+
+#include "log.h"
 
 namespace hc {
 
@@ -17,22 +21,16 @@ Media::~Media()
 {
 	// Clean up databases. This isn't Java, this is real programming
 	while (bitmaps_.size()) {
-		if (bitmaps_[0].references != 0) {
-			std::cout << "\033[33;1m[Media] [Warning] ";
-			std::cout << bitmaps_[0].file << "\'' had " << bitmaps_[0].references;
-			std::cout << " references left.\033[0m;" << std::endl;
-		}
+		if (bitmaps_[0].references != 0)
+			Log::log(Log::WARNING, "Media", "\'" + bitmaps_[0].file + "\' had " + std::to_string(bitmaps_[0].references) + " references left.");
 
 		al_destroy_bitmap(bitmaps_[0].bitmap);
 		bitmaps_.erase(bitmaps_.begin());
 	}
 
 	while (fonts_.size()) {
-		if (fonts_[0].references != 0) {
-			std::cout << "\033[33;1m[Media] [Warning] Font \'";
-			std::cout << fonts_[0].file << " (size " << fonts_[0].size << ")\'' had " << fonts_[0].references;
-			std::cout << " references left.\033[0m" << std::endl;
-		}
+		if (fonts_[0].references != 0)
+			Log::log(Log::WARNING, "Media", "\'" + fonts_[0].file + "\' had " + std::to_string(fonts_[0].references) + " references left.");
 
 		al_destroy_font(fonts_[0].font);
 		fonts_.erase(fonts_.begin());
@@ -58,7 +56,7 @@ ALLEGRO_BITMAP* Media::image(std::string file)
 	img.references = 1;
 
 	if (img.bitmap == NULL) {
-		std::cout << "\033[33;1m[Media] [Warning] Failed to load " << file << "\033[0m" << std::endl;
+		Log::log(Log::ERROR, "Media", "Failed to load " + file);
 		return nullptr;
 	}
 
@@ -82,7 +80,7 @@ ALLEGRO_FONT* Media::font(std::string file, int size)
 	fnt.references = 1;
 
 	if (fnt.font == NULL) {
-		std::cout << "\033[33;1m[Media] [Warning] Failed to load " << file << "\033[0m" << std::endl;
+		Log::log(Log::ERROR, "Media", "Failed to load " + file);
 		return nullptr;
 	}
 

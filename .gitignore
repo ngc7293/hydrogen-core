@@ -38,3 +38,4 @@
 
 # VSCode project files
 .vscode/
+*.log

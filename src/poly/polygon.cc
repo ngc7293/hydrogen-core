@@ -174,7 +174,6 @@ void Polygon::add(vecf joint)
 		radius_sq_ = (joint.length_sq() + 16);
 }
 
-#ifdef _DEBUG
 void Polygon::render()
 {
 	for (unsigned int i = 1; i < joints_.size(); i++)
@@ -182,6 +181,5 @@ void Polygon::render()
 
 	al_draw_circle(pos_.x(), pos_.y(), sqrt(radius_sq_), al_map_rgb(127, 127, 255), 2);
 }
-#endif
 
 } //namespace hc

@@ -140,7 +140,6 @@ vecf Segment::intersection_point(Segment a, Segment b)
 	}
 }
 
-#ifdef _DEBUG
 void Segment::render()
 {
 	al_draw_line(pos_.x(), pos_.y(), pos_.x() + dir_.x(), pos_.y() + dir_.y(), al_map_rgb(255, 0, 255), 0);
@@ -148,6 +147,5 @@ void Segment::render()
 	al_draw_filled_circle(pos_.x(), pos_.y(), 2, al_map_rgb(0, 255, 0));
 	al_draw_filled_circle(pos_.x() + dir_.x(), pos_.y() + dir_.y(), 2, al_map_rgb(0, 255, 0));
 }
-#endif
 
 } //namespace hc

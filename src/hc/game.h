@@ -1,6 +1,6 @@
 #include <allegro5/allegro.h>
 
-#include "defaults.h"
+#include "defs.h"
 
 #include "input.h"
 #include "manager.h"
@@ -39,6 +39,15 @@ private:
 	Media* media_;
 	View* view_;
 
+	// Font used to display the on-screen log
+	ALLEGRO_FONT* font_;
+
+	// Debug info flags
+	bool display_fps_;
+	double last_frame_;
+
+	bool display_masks_;
+
 private:
 	Game();
 	~Game();
@@ -47,8 +56,8 @@ public:
 	// Singleton access to the game
 	static Game& game()
 	{
-		static Game game_ = Game();
-		return game_;
+		static Game instance_ = Game();
+		return instance_;
 	}
 
 	// The main game loop. Return false if the game should end
