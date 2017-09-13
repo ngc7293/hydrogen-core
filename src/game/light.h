@@ -52,6 +52,9 @@ private:
 	ALLEGRO_VERTEX* vertices;
 	ALLEGRO_BITMAP* shadows;
 
+	unsigned int rays_;
+	std::vector<pt> lights_;
+
 public:
 	Light();
 	~Light();

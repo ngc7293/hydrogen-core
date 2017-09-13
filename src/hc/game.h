@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+
 #include <allegro5/allegro.h>
 
 #include "defs.h"
@@ -43,10 +46,13 @@ private:
 	ALLEGRO_FONT* font_;
 
 	// Debug info flags
-	bool display_fps_;
-	double last_frame_;
+	bool debug_display_fps_;
+	double debug_last_frame_time_;
 
-	bool display_masks_;
+	bool debug_display_masks_;
+
+	bool debug_display_osd_;
+	std::vector<std::string> debug_osd_;
 
 private:
 	Game();
@@ -76,6 +82,9 @@ public:
 
 	// Return the main display
 	ALLEGRO_DISPLAY* display() { return display_; }
+
+	// Add string to debug osd
+	void debug_osd(std::string str) { debug_osd_.push_back(str); }
 };
 
 } // namespace hc

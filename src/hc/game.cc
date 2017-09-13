@@ -15,6 +15,7 @@
 #include "log.h"
 #include "manager.h"
 #include "media.h"
+#include "perlin.h"
 #include "view.h"
 
 namespace hc {
@@ -23,6 +24,7 @@ Game::Game()
 {
 	// Assume user has done no setup
 	srand(time(0));
+	Perlin::seed(1505266067);
 
 	// Initiate the allegro library and addons
 	al_init();
@@ -53,6 +55,7 @@ Game::Game()
 	render_ = false;
 
 	// Display
+	al_set_new_display_option(ALLEGRO_RENDER_METHOD, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 8, ALLEGRO_SUGGEST);
@@ -72,13 +75,15 @@ Game::Game()
 	al_register_event_source(eventqueue_, al_get_mouse_event_source());
 
 	// Load on-screen debug info font
-	font_ = media_->font("mono.ttf", 12);
+	font_ = media_->font("mono.ttf", 16);
 
 	// Debug info
-	display_fps_ = true;
-	last_frame_ = al_get_time();
+	debug_display_fps_ = true;
+	debug_last_frame_time_ = al_get_time();
 
-	display_masks_ = false;
+	debug_display_masks_ = false;
+
+	debug_display_osd_ = true;
 }
 
 Game::~Game()
@@ -125,10 +130,19 @@ bool Game::loop()
 		manager_->render();
 
 		// FPS counter display
-		if (display_fps_) {
-			al_draw_filled_rectangle(0, 0, 16, 12, al_map_rgb(0, 0, 0));
-			al_draw_textf(font_, al_map_rgb(255, 255, 255), 0, 0, 0, "%i", (int)(1 / (al_get_time() - last_frame_)));
-			last_frame_ = al_get_time();
+		if (debug_display_fps_) {
+			al_draw_filled_rectangle(0, 0, 24, 16, al_map_rgb(0, 0, 0));
+			al_draw_textf(font_, al_map_rgb(255, 255, 255), 0, 0, 0, "%i", (int)(1 / (al_get_time() - debug_last_frame_time_)));
+			debug_last_frame_time_ = al_get_time();
+		}
+		if (debug_display_osd_) {
+			int y = 16;
+			for (std::string str : debug_osd_) {
+				al_draw_filled_rectangle(0, y, al_get_text_width(font_, str.c_str()), y + 16, al_map_rgb(0, 0, 0));
+				al_draw_textf(font_, al_map_rgb(255, 255, 255), 0, y, 0, "%s", str.c_str());
+				y += 16;
+			}
+			debug_osd_.clear();
 		}
 
 		// Flip the buffer, and clear it
@@ -139,12 +153,14 @@ bool Game::loop()
 	// Debug toggles
 	if (event.type == ALLEGRO_EVENT_KEY_CHAR || event.keyboard.modifiers & ALLEGRO_KEYMOD_CTRL) {
 		switch (event.keyboard.keycode) {
-		case ALLEGRO_KEY_B:
-			display_fps_ = !display_fps_;
+		case ALLEGRO_KEY_F:
+			debug_display_fps_ = !debug_display_fps_;
 			break;
 		case ALLEGRO_KEY_M:
-			display_masks_ = !display_masks_;
+			debug_display_masks_ = !debug_display_masks_;
 			break;
+		case ALLEGRO_KEY_O:
+			debug_display_osd_ = !debug_display_osd_;
 		}
 	}
 

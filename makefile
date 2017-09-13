@@ -1,7 +1,7 @@
 # Compiler
 CXX = g++
 CXXFLAGS = -MMD -D _DEBUG -c -g -Wall -std=c++11
-ALLEG =`pkg-config --cflags --libs allegro-5 allegro_primitives-5 allegro_image-5 allegro_font-5 allegro_ttf-5`
+ALLEG =`pkg-config --cflags --libs allegro-5 allegro_primitives-5 allegro_image-5 allegro_font-5 allegro_ttf-5 allegro_color-5`
 
 SRC_DIR := src/
 BIN_DIR := obj/

@@ -7,9 +7,11 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_color.h>
 
 #include "game.h"
 #include "input.h"
+#include "perlin.h"
 #include "vector.h"
 
 Light::Light()
@@ -17,51 +19,26 @@ Light::Light()
 {
 	masks.push_back(mask());
 	masks.back().points.push_back(pt(0, 0));
-	masks.back().points.push_back(pt(840, 0));
-	masks.back().points.push_back(pt(840, 360));
-	masks.back().points.push_back(pt(0, 360));
+	masks.back().points.push_back(pt(1280, 0));
+	masks.back().points.push_back(pt(1280, 720));
+	masks.back().points.push_back(pt(0, 720));
 	masks.back().points.push_back(pt(0, 0));
 
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(100, 150));
-	masks.back().points.push_back(pt(120, 50));
-	masks.back().points.push_back(pt(200, 80));
-	masks.back().points.push_back(pt(140, 210));
-	masks.back().points.push_back(pt(100, 150));
+	for (int i = 0; i < 18; i++) {
+		for (int j = 0; j < 10; j++) {
+			float p = hc::Perlin::noise(i + 0.1, j + 0.1, 1);
+			if (p >= 0.5) {
+				masks.push_back(mask());
+				masks.back().points.push_back(pt(64 + i * 64, 40 + j * 64));
+				masks.back().points.push_back(pt(128 + i * 64, 40 + j * 64));
+				masks.back().points.push_back(pt(128 + i * 64, 104 + j * 64));
+				masks.back().points.push_back(pt(64 + i * 64, 104 + j * 64));
+				masks.back().points.push_back(pt(64 + i * 64, 40 + j * 64));
+			}
+		}
+	}
 
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(100, 200));
-	masks.back().points.push_back(pt(120, 250));
-	masks.back().points.push_back(pt(60, 300));
-	masks.back().points.push_back(pt(100, 200));
-
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(200, 260));
-	masks.back().points.push_back(pt(220, 150));
-	masks.back().points.push_back(pt(300, 200));
-	masks.back().points.push_back(pt(350, 320));
-	masks.back().points.push_back(pt(200, 260));
-
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(540, 60));
-	masks.back().points.push_back(pt(560, 40));
-	masks.back().points.push_back(pt(570, 70));
-	masks.back().points.push_back(pt(540, 60));
-
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(650, 190));
-	masks.back().points.push_back(pt(760, 170));
-	masks.back().points.push_back(pt(740, 270));
-	masks.back().points.push_back(pt(630, 290));
-	masks.back().points.push_back(pt(650, 190));
-
-	masks.push_back(mask());
-	masks.back().points.push_back(pt(600, 95));
-	masks.back().points.push_back(pt(780, 50));
-	masks.back().points.push_back(pt(680, 150));
-	masks.back().points.push_back(pt(600, 95));
-
-	vertices = (ALLEGRO_VERTEX*)malloc(sizeof(ALLEGRO_VERTEX) * 200);
+	vertices = (ALLEGRO_VERTEX*)malloc(sizeof(ALLEGRO_VERTEX) * 1000);
 	shadows = al_create_bitmap(1280, 720);
 }
 
@@ -112,6 +89,8 @@ std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
 		}
 	}
 
+	hc::Game::game().debug_osd("unique points: " + std::to_string(points.size()) + " out of a maximum of " + std::to_string(masks.size() * 4));
+
 	std::vector<float> angles;
 	for (pt& p : points) {
 		float angle = atan2(p.y - sightY, p.x - sightX);
@@ -152,32 +131,60 @@ std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
 
 void Light::update()
 {
+	hc::Input& input = hc::Game::game().input();
+
+	if (input.isMouseButton(hc::Input::PRESSED, 0)) {
+		bool found = false;
+		for (unsigned int i = 0; i < lights_.size(); i++) {
+			if (sqrt(pow(lights_[i].x - input.mx(), 2) + pow(lights_[i].y - input.my(), 2)) < 8) {
+				lights_.erase(lights_.begin() + i);
+				found = true;
+			}
+		}
+
+		if (!found)
+			lights_.push_back(pt(input.mx(), input.my()));
+	}
 }
 
 void Light::render()
 {
 	hc::Input& input = hc::Game::game().input();
 
-	al_draw_filled_rectangle(0, 0, 840,360, al_map_rgb(200, 127, 0));
+	al_draw_filled_rectangle(0, 0, 1280, 720, al_map_rgb(200, 127, 0));
 
+	int h = 0;
 	for (mask& m : masks) {
 		for (unsigned int j = 1; j < m.points.size(); j++) {
-			al_draw_line(m.points[j - 1].x, m.points[j - 1].y, m.points[j].x, m.points[j].y, al_map_rgb(255, 255, 255), 4);
+			al_draw_line(m.points[j - 1].x, m.points[j - 1].y, m.points[j].x, m.points[j].y, al_color_hsv(h, 1, 1), 4);
+			h = (h + 30) % 360;
 		}
 	}
+	rays_ = 0;
+	int lights = 0;
+
+	al_draw_filled_circle(input.mx(), input.my(), 8, al_map_rgb(255, 255, 255));
+	for (pt lt : lights_)
+		al_draw_filled_circle(lt.x, lt.y, 8, al_map_rgb(255, 255, 255));
 
 	al_set_target_bitmap(shadows);
-	al_clear_to_color(al_map_rgb(255, 255, 255));
+	al_clear_to_color(al_map_rgb(200, 200, 200));
 
 	render_light(input.mx(), input.my());
-	for (float a = 0; a < 2 * PI; a += PI / 16)
-		render_light(input.mx() + 4 * cos(a), input.my() + 4 * sin(a));
+	lights++;
+	
+	for (pt lt : lights_) {
+		render_light(lt.x, lt.y);
+		lights++;
+	}
+
 
 	al_set_target_backbuffer(hc::Game::game().display());
 
 	al_set_blender(ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE);
 	al_draw_bitmap(shadows, 0, 0, 0);
 	al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
+	hc::Game::game().debug_osd("lights: " + std::to_string(lights) + " rays: " + std::to_string(rays_) + " blocks: " + std::to_string(masks.size()));
 }
 
 void Light::render_light(float x, float y)
@@ -185,7 +192,7 @@ void Light::render_light(float x, float y)
 	std::vector<seg> rays = get_sight_polygon(x, y);
 	rays.push_back(rays.front());
 
-	ALLEGRO_COLOR col = al_premul_rgba(0, 0, 0, 255 / 33);
+	ALLEGRO_COLOR col = al_premul_rgba(0, 0, 0, 255);
 
 	vertices[0].x = x;
 	vertices[0].y = y;
@@ -204,6 +211,7 @@ void Light::render_light(float x, float y)
 		vertices[i].v = 0;
 
 		i++;
+		rays_++;
 	}
 
 	al_draw_prim(vertices, NULL, NULL, 0, i, ALLEGRO_PRIM_TRIANGLE_FAN);
