@@ -2,6 +2,8 @@
 
 #include "vector.h"
 
+#include "light.h"
+
 int main(int argc, char const* argv[])
 {
 	// I dont want to do this but my vector algebra fails without it
@@ -9,6 +11,8 @@ int main(int argc, char const* argv[])
 
 	// Setup the Game object
 	hc::Game& game = hc::Game::game();
+
+	game.manager().add(new Light());
 
 	/* Run the game loop */
 	while (game.loop())
