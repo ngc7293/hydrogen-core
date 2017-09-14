@@ -23,6 +23,7 @@ Light::Light()
 	masks.back().points.push_back(pt(1280, 720));
 	masks.back().points.push_back(pt(0, 720));
 	masks.back().points.push_back(pt(0, 0));
+	masks.back().update_radius();
 
 	for (int i = 0; i < 18; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -34,6 +35,7 @@ Light::Light()
 				masks.back().points.push_back(pt(128 + i * 64, 104 + j * 64));
 				masks.back().points.push_back(pt(64 + i * 64, 104 + j * 64));
 				masks.back().points.push_back(pt(64 + i * 64, 40 + j * 64));
+				masks.back().update_radius();
 			}
 		}
 	}
@@ -70,11 +72,14 @@ seg Light::get_intersection(seg r, seg s)
 	return r;
 }
 
-std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
+std::vector<seg> Light::get_sight_polygon(float sightX, float sightY, float r)
 {
 	std::vector<pt> points;
 
 	for (mask& m : masks) {
+		if (m.radius + ((m.center.x - sightX) * (m.center.x - sightX) + (m.center.y - sightY) * (m.center.y - sightY)) > r * r) {
+			continue;
+		}
 		for (pt& p : m.points) {
 			bool found = false;
 			for (pt r : points) {
@@ -88,6 +93,13 @@ std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
 				points.push_back(p);
 		}
 	}
+
+	for (float a = 0; a < 2 * PI; a += PI/8) {
+		points.push_back(pt(sightX + (2 * r * cos(a)), sightY + (2 * r * sin(a))));
+	}
+
+	if (points.size() == 0)
+		return std::vector<Seg>();
 
 	hc::Game::game().debug_osd("unique points: " + std::to_string(points.size()) + " out of a maximum of " + std::to_string(masks.size() * 4));
 
@@ -106,6 +118,9 @@ std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
 
 		seg closest = seg(NAN, NAN, NAN, NAN, NAN);
 		for (mask& m : masks) {
+			if (m.radius + ((m.center.x - sightX) * (m.center.x - sightX) + (m.center.y - sightY) * (m.center.y - sightY)) > r * r) {
+			continue;
+		}
 			for (unsigned int j = 1; j < m.points.size(); j++) {
 				pt& a = m.points[j];
 				pt& b = m.points[j - 1];
@@ -120,6 +135,9 @@ std::vector<seg> Light::get_sight_polygon(float sightX, float sightY)
 
 		if (closest.null())
 			continue;
+
+		if (closest.t > r)
+			closest.t = r;
 
 		intersects.push_back(closest);
 	}
@@ -170,14 +188,13 @@ void Light::render()
 	al_set_target_bitmap(shadows);
 	al_clear_to_color(al_map_rgb(200, 200, 200));
 
-	render_light(input.mx(), input.my());
+	render_light(input.mx(), input.my(), 1280);
 	lights++;
 	
 	for (pt lt : lights_) {
-		render_light(lt.x, lt.y);
+		render_light(lt.x, lt.y, 200);
 		lights++;
 	}
-
 
 	al_set_target_backbuffer(hc::Game::game().display());
 
@@ -187,9 +204,12 @@ void Light::render()
 	hc::Game::game().debug_osd("lights: " + std::to_string(lights) + " rays: " + std::to_string(rays_) + " blocks: " + std::to_string(masks.size()));
 }
 
-void Light::render_light(float x, float y)
+void Light::render_light(float x, float y, float r)
 {
-	std::vector<seg> rays = get_sight_polygon(x, y);
+	std::vector<seg> rays = get_sight_polygon(x, y, r);
+	if (rays.size() == 0)
+		return;
+
 	rays.push_back(rays.front());
 
 	ALLEGRO_COLOR col = al_premul_rgba(0, 0, 0, 255);
