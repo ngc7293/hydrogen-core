@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "drawer.h"
 #include "vector.h"
 
 int main(int argc, char const* argv[])
@@ -9,6 +10,7 @@ int main(int argc, char const* argv[])
 
 	// Setup the Game object
 	hc::Game& game = hc::Game::game();
+	game.manager().add(new Drawer());
 
 	/* Run the game loop */
 	while (game.loop())
