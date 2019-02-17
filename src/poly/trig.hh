@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "util/vector.hh"
 
 #ifndef TRIG_H_
 #define TRIG_H_

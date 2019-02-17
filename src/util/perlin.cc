@@ -1,4 +1,4 @@
-#include "perlin.h"
+#include "util/perlin.hh"
 
 #include <algorithm>
 #include <iostream>

@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "object.h"
+#include "hc/object.hh"
 
 namespace hc {
 

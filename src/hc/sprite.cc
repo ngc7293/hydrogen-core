@@ -1,14 +1,14 @@
-#include "sprite.h"
+#include "hc/sprite.hh"
 
 #include <string>
 
 #include <allegro5/allegro.h>
 
-#include "game.h"
-#include "media.h"
-#include "object.h"
-#include "vector.h"
-#include "view.h"
+#include "hc/game.hh"
+#include "hc/media.hh"
+#include "hc/object.hh"
+#include "util/vector.hh"
+#include "hc/view.hh"
 
 namespace hc {
 

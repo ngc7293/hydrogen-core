@@ -1,4 +1,4 @@
-#include "game.h"
+#include "hc/game.hh"
 
 #include <iostream>
 
@@ -11,11 +11,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-#include "input.h"
-#include "log.h"
-#include "manager.h"
-#include "media.h"
-#include "view.h"
+#include "hc/input.hh"
+#include "hc/log.hh"
+#include "hc/manager.hh"
+#include "hc/media.hh"
+#include "hc/view.hh"
 
 namespace hc {
 
@@ -40,7 +40,7 @@ Game::Game()
 	Log::set_logfile_level(Log::WARNING);
 
 	uint32_t version = al_get_allegro_version();
-	Log::log(Log::INFO, "Game", "Initialized Allegro v" + std::to_string(version >> 24) + "." + std::to_string((version >> 16) & 255) + "." + std::to_string((version >> 8) & 255) + "." + std::to_string(version & 255));
+	Log::log(Log::INFO, "hc/game", "Initialized Allegro v" + std::to_string(version >> 24) + "." + std::to_string((version >> 16) & 255) + "." + std::to_string((version >> 8) & 255) + "." + std::to_string(version & 255));
 
 	// Modules
 	view_ = new View();

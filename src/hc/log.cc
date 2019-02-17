@@ -1,4 +1,4 @@
-#include "log.h"
+#include "hc/log.hh"
 
 #include <fstream>
 #include <iomanip>

@@ -1,6 +1,6 @@
-#include "game.h"
+#include "hc/game.hh"
 
-#include "vector.h"
+#include "util/vector.hh"
 
 int main(int argc, char const* argv[])
 {

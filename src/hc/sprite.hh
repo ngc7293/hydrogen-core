@@ -5,7 +5,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "vector.h"
+#include "util/vector.hh"
 
 namespace hc {
 

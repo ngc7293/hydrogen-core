@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "vector.h"
+#include "util/vector.hh"
 
 namespace hc {
 
@@ -42,7 +42,9 @@ public:
 
 	float radius_sq() const { return radius_sq_; }
 
+#ifdef _DEBUG
 	void render();
+#endif
 };
 
 } //namespace hc

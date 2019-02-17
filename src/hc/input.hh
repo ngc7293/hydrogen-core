@@ -3,9 +3,9 @@
 
 #include <allegro5/allegro.h>
 
-#include "defs.h"
+#include "hc/defs.hh"
 
-#include "vector.h"
+#include "util/vector.hh"
 
 namespace hc {
 

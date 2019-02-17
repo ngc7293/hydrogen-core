@@ -1,10 +1,10 @@
-#include "manager.h"
+#include "hc/manager.hh"
 
 #include <string>
 #include <vector>
 
-#include "log.h"
-#include "object.h"
+#include "hc/log.hh"
+#include "hc/object.hh"
 
 namespace hc {
 
@@ -20,7 +20,7 @@ Manager::~Manager()
 		deleted++;
 	}
 
-	Log::log(Log::INFO, "Manager", "Destroyed " + std::to_string(deleted) + " objects");
+	Log::log(Log::INFO, "hc/manager", "Destroyed " + std::to_string(deleted) + " objects");
 }
 
 void Manager::add(Object* object)

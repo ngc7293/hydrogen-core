@@ -1,4 +1,4 @@
-#include "polygon.h"
+#include "poly/polygon.hh"
 
 #include <algorithm>
 #include <iostream>
@@ -7,13 +7,15 @@
 #include <cmath>
 #include <ctime>
 
+#ifdef _DEBUG
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#endif
 
-#include "vector.h"
+#include "util/vector.hh"
 
 #ifdef _DEBUG
-#include "segment.h"
+#include "poly/segment.hh"
 #endif
 
 namespace hc {
@@ -174,6 +176,7 @@ void Polygon::add(vecf joint)
 		radius_sq_ = (joint.length_sq() + 16);
 }
 
+#ifdef _DEBUG
 void Polygon::render()
 {
 	for (unsigned int i = 1; i < joints_.size(); i++)
@@ -181,5 +184,6 @@ void Polygon::render()
 
 	al_draw_circle(pos_.x(), pos_.y(), sqrt(radius_sq_), al_map_rgb(127, 127, 255), 2);
 }
+#endif
 
 } //namespace hc

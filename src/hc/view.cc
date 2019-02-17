@@ -1,11 +1,11 @@
-#include "view.h"
+#include "hc/view.hh"
 
 #include <cmath>
 
-#include "vector.h"
+#include "util/vector.hh"
 
-#include "game.h"
-#include "input.h"
+#include "hc/game.hh"
+#include "hc/input.hh"
 
 namespace hc {
 

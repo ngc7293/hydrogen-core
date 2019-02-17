@@ -1,7 +1,7 @@
 #ifndef VIEW_H_
 #define VIEW_H_
 
-#include "vector.h"
+#include "util/vector.hh"
 
 namespace hc {
 

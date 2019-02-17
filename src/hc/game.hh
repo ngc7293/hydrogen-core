@@ -1,11 +1,11 @@
 #include <allegro5/allegro.h>
 
-#include "defs.h"
+#include "hc/defs.hh"
 
-#include "input.h"
-#include "manager.h"
-#include "media.h"
-#include "view.h"
+#include "hc/input.hh"
+#include "hc/manager.hh"
+#include "hc/media.hh"
+#include "hc/view.hh"
 
 #ifndef GAME_H_
 #define GAME_H_

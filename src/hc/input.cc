@@ -1,4 +1,4 @@
-#include "input.h"
+#include "hc/input.hh"
 
 namespace hc {
 

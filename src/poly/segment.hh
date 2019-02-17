@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "util/vector.hh"
 
 #ifndef SEGMENT_H_
 #define SEGMENT_H_
@@ -15,14 +15,14 @@ private:
 	vecf dir_;
 
 public:
-	static float distance(Segment a, Segment b);
-	static float distance(Segment a, vecf point);
+	static float distance(Segment& a, Segment& b);
+	static float distance(Segment& a, vecf& point);
 
-	static bool intersection(Segment a, Segment b);
+	static bool intersection(Segment& a, Segment& b);
 
 	// Return the point at which two segment intersect.
 	// If the segments don't intersect, returns the vecf(nan, nan)
-	static vecf intersection_point(Segment a, Segment b);
+	static vecf intersection_point(Segment& a, Segment& b);
 
 public:
 	// Default constructor (0, 0, 0, 0)
@@ -38,10 +38,9 @@ public:
 	vecf& dir() { return dir_; }
 	vecf end() { return pos_ + dir_; }
 
-#ifdef _DEBUG
 	void render();
-#endif
 };
-};
+
+} //namespace hc
 
 #endif

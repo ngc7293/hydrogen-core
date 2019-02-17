@@ -1,4 +1,4 @@
-#include "segment.h"
+#include "poly/segment.hh"
 
 #ifdef _DEBUG
 #include <iostream>
@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-#include "trig.h"
+#include "poly/trig.hh"
 
 namespace hc {
 
@@ -39,7 +39,7 @@ Segment::Segment(float x, float y, float x2, float y2)
 
 Segment::~Segment() {}
 
-float Segment::distance(Segment a, Segment b)
+float Segment::distance(Segment& a, Segment& b)
 {
 	float cur, min;
 
@@ -58,7 +58,7 @@ float Segment::distance(Segment a, Segment b)
 	return min;
 }
 
-float Segment::distance(Segment a, vecf p)
+float Segment::distance(Segment& a, vecf& p)
 {
 	// If segment 'a' is a point (length 0), return the distance(a, p)
 	if (a.dir() == vecf(0, 0))
@@ -84,12 +84,12 @@ float Segment::distance(Segment a, vecf p)
 	return dis;
 }
 
-bool Segment::intersection(Segment a, Segment b)
+bool Segment::intersection(Segment& a, Segment& b)
 {
 	return !std::isnan(intersection_point(a, b).x());
 }
 
-vecf Segment::intersection_point(Segment a, Segment b)
+vecf Segment::intersection_point(Segment& a, Segment& b)
 {
 	// Most of the credit for this algorithm goes to Stack Overflow user Gareth Rees.
 	// This is essentially a step-step C++ copy of his answer linked below.
@@ -140,6 +140,7 @@ vecf Segment::intersection_point(Segment a, Segment b)
 	}
 }
 
+#ifdef _DEBUG
 void Segment::render()
 {
 	al_draw_line(pos_.x(), pos_.y(), pos_.x() + dir_.x(), pos_.y() + dir_.y(), al_map_rgb(255, 0, 255), 0);
@@ -147,5 +148,6 @@ void Segment::render()
 	al_draw_filled_circle(pos_.x(), pos_.y(), 2, al_map_rgb(0, 255, 0));
 	al_draw_filled_circle(pos_.x() + dir_.x(), pos_.y() + dir_.y(), 2, al_map_rgb(0, 255, 0));
 }
+#endif
 
 } //namespace hc

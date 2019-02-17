@@ -1,8 +1,8 @@
-#include "trig.h"
+#include "poly/trig.hh"
 
 #include <cmath>
 
-#include "vector.h"
+#include "util/vector.hh"
 
 namespace trig {
 
