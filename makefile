@@ -21,7 +21,7 @@ hc.o: $(BINS)
 $(BIN_DIR)%.o: $(SRC_DIR)%.cc
 	@echo $(subst src/,"",$<)
 	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) -c -o $@ $< -Isrc/hc/ -Isrc/util/ -Isrc/poly
+	@$(CXX) $(CXXFLAGS) -c -o $@ $< -Isrc/
 
 clean:
 	@rm -rf $(BIN_DIR) hc.o

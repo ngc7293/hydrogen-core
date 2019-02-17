@@ -46,13 +46,15 @@ float Segment::distance(Segment& a, Segment& b)
 	// Try all combinations
 	min = distance(a, b.pos());
 
-	cur = distance(a, b.end());
+	vecf v = b.end();
+	cur = distance(a, v);
 	min = (min > cur ? cur : min);
 
 	cur = distance(b, a.pos());
 	min = (min > cur ? cur : min);
 
-	cur = distance(b, a.end());
+	v = a.end();
+	cur = distance(b, v);
 	min = (min > cur ? cur : min);
 
 	return min;
@@ -71,7 +73,8 @@ float Segment::distance(Segment& a, vecf& p)
 	t = (t < 0 ? 0 : (t > 1 ? 1 : t));
 
 	// Find the distance(ao + t * ad, t)
-	float dis = trig::distance(a.pos() + a.dir() * t, p);
+	vecf v = a.pos() + a.dir() * t;
+	float dis = trig::distance(v, p);
 
 #ifdef _DEBUG
 	// For visualisation purpose, draw the shortest line between the segment and the point.
