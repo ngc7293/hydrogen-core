@@ -17,7 +17,7 @@ vecf View::onDisplay(vecf pos)
 
 View::View()
 {
-	pos_ = vecf(-DEFAULT_SCREEN_HEIGHT * 0.5, -DEFAULT_SCREEN_HEIGHT * 0.5);
+	pos_ = vecf(0, 0);
 	scale_ = 1;
 
 	minpos_ = vecf(pos_.x(), pos_.y());
@@ -59,7 +59,7 @@ void View::move()
 	pos_ += vecf(xto, yto) * (VIEW_SPEED / scale_);
 
 	// Limit view to minpos and maxpos
-	if (pos_.x()< minpos_.x() - (DEFAULT_SCREEN_WIDTH / scale_ * 0.5))
+	if (pos_.x() < minpos_.x() - (DEFAULT_SCREEN_WIDTH / scale_ * 0.5))
 		pos_.set_x(minpos_.x() - (DEFAULT_SCREEN_WIDTH / scale_ * 0.5));
 	if (pos_.y() < minpos_.y() - (DEFAULT_SCREEN_HEIGHT / scale_ * 0.5))
 		pos_.set_y(minpos_.y() - (DEFAULT_SCREEN_HEIGHT / scale_ * 0.5));
